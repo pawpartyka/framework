@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/validation",
-  "version": "0.0.0",
+  "version": "0.0.6",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
@@ -26,8 +26,8 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
-    "@artisanjs/core": "^0.0.5",
-    "@artisanjs/testing": "^0.0.5",
+    "@artisanjs/core": "^0.0.6",
+    "@artisanjs/testing": "^0.0.6",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "@types/validator": "^13.0.0",
