@@ -1,0 +1,15 @@
+# blacklist all
+*
+!*/
+
+# include whitelist
+!/.editorconfig
+!/.gitignore
+!/lerna.json
+!/LICENSE
+!/package.json
+!/package-lock.json
+!/README.md
+!/tsconfig.json
+!/tslint.json
+
