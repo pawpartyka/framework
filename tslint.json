@@ -71,7 +71,8 @@
     "callable-types": false,
     "no-empty-interface": false,
     "no-string-literal": false,
-    "array-type": false
+    "array-type": false,
+    "unified-signatures": false
   },
   "rulesDirectory": []
 }
