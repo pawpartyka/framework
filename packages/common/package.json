@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/common",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",

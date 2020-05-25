@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/testing",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
@@ -23,7 +23,7 @@
     "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "@artisanjs/core": "^0.0.4",
+    "@artisanjs/core": "^0.0.5",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "husky": "^4.0.10",
