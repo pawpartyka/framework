@@ -21,7 +21,6 @@ export function Required(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'required',
     rule: RequiredRule,
   };
 }

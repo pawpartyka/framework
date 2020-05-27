@@ -22,7 +22,6 @@ export function MaxLength(max: number, options?: Pick<Constraint, 'message'>): C
   return {
     args: [max],
     message: options?.message,
-    name: 'maxLength',
     rule: MaxLengthRule,
   };
 }

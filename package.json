@@ -11,9 +11,7 @@
     "test:coverage": "lerna run test:coverage"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.3",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
     "lerna": "^3.20.2"
   },
   "husky": {

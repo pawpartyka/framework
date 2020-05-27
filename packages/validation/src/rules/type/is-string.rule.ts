@@ -21,7 +21,6 @@ export function IsString(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'isString',
     rule: IsStringRule,
   };
 }

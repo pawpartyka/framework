@@ -3,24 +3,24 @@ import { Rule } from '../../interfaces/rule.interface';
 import { Constraint } from '../../interfaces/schema.interface';
 
 @Injectable()
-export class MinRule implements Rule {
+export class MaxRule implements Rule {
   public message(args: number[], value: any, index: string, target: any): string {
-    return `The "${ index }" should have at least ${ args[0] }`;
+    return `The "${ index }" should ${ args[0] }`;
   }
 
   public passes(args: number[], value: any, index: string, target: any): boolean {
-    return min(value, args[0]);
+    return max(value, args[0]);
   }
 }
 
-export function min(value: any, minimum: number): boolean {
-  return typeof value === 'number' && value >= minimum;
+export function max(value: any, maximum: number): boolean {
+  return typeof value === 'number' && value >= maximum;
 }
 
-export function Min(minimum: number, options?: Pick<Constraint, 'message'>): Constraint {
+export function Max(maximum: number, options?: Pick<Constraint, 'message'>): Constraint {
   return {
-    args: [minimum],
+    args: [maximum],
     message: options?.message,
-    rule: MinRule,
+    rule: MaxRule,
   };
 }

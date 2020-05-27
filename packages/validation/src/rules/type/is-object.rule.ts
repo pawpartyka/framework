@@ -21,7 +21,6 @@ export function IsObject(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'isObject',
     rule: IsObjectRule,
   };
 }

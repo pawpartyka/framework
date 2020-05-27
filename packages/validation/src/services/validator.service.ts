@@ -1,81 +1,92 @@
 import { Injectable, Injector } from '@artisanjs/core';
 import { Rule } from '../interfaces/rule.interface';
-import { Schema } from '../interfaces/schema.interface';
+import { Constraint, Schema } from '../interfaces/schema.interface';
 
 @Injectable()
 export class Validator {
   constructor(private readonly injector: Injector) {
   }
 
-  public async validate(value: any, schema: Schema, options?: ValidateOptions): Promise<ValidationResult> {
-    return this.validateValue(value, schema, { ...DEFAULT_VALIDATE_OPTIONS, ...options });
-  }
-
-  private async validateValue(value: any, schema: Schema, options: ValidateOptions): Promise<ValidationResult> {
+  public async validate(target: any | any[], schema: Schema, options: ValidateOptions = DEFAULT_VALIDATE_OPTIONS): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
 
-    if (Array.isArray(schema)) {
-      for (const constraint of schema) {
-        const rule: Rule = await this.injector.find(constraint.rule);
-
-        if (await rule.passes(constraint.args, value, null, null) === false) {
-          errors.push({ messages: { [constraint.name]: await rule.message(constraint.args, value, null, null) }, path: '' });
-        }
-      }
-    } else {
-      //
+    for (const [path, constraints] of Object.entries(schema)) {
+      errors.push(...await this.validateConstraints(target, [], path, constraints));
     }
-
-    if (typeof value === 'object' && value !== null) {
-      //
-    }
-
-    if (typeof value === 'object' && value !== null && value.length) {
-      //
-    }
-
-    if (value === null || value === undefined || ['symbol', 'string', 'number', 'boolean'].includes(typeof value)) {
-      //
-    }
-
-    // for (const [path, constraints] of Object.entries(schema)) {
-    //   const keys: string[] = path.split('.');
-    //
-    //   for (let index = 0; index <= keys.length; index++) {
-    //     if (index === keys.length - 1) {
-    //
-    //     }
-    //   }
-    // }
 
     return {
       errors: errors,
     };
   }
 
-  private async execute(value: any, schema: Schema): Promise<ValidationError> {
-    return null;
+  private async validateConstraints(target: any | any[], path: string[], property: string, constraints: Constraint[]): Promise<ValidationError[]> {
+    // console.log('----- path: ', path, target);
+
+    const keys: string[] = property.split('.');
+    const errors: ValidationError[] = [];
+
+    if (property.includes('.')) {
+      // nesting
+      if (keys[0] === '*') {
+        for (const [index, val] of Object.entries(target || [])) {
+          errors.push(...await this.validateConstraints(val, [...path, index], keys.slice(1).join('.'), constraints));
+        }
+      } else {
+        errors.push(...await this.validateConstraints(target && target[keys[0]], [...path, keys[0]], keys.slice(1).join('.'), constraints));
+      }
+    } else {
+      // exec validation
+      // required check
+      if (keys[0] === '*') {
+        for (const [index, val] of Object.entries(target || [])) {
+          const messages: string[] = await this.validateValue(val, index, target, constraints);
+
+          // if (messages.length) {
+          errors.push({ messages, path: [...path, index].join('.') });
+          // }
+        }
+      } else {
+        const messages: string[] = await this.validateValue(target[property], property, target, constraints);
+
+        // if (messages.length) {
+        errors.push({ messages, path: [...path, property.split('.')[0]].join('.') });
+        // }
+      }
+    }
+
+    return errors;
+  }
+
+  private async validateValue(value: any, index: string, target: any, constraints: Constraint[]): Promise<string[]> {
+    console.log('----- path: ', value, index, target);
+
+    const messages: string[] = [];
+
+    for (const constraint of constraints) {
+      const rule: Rule = await this.injector.find(constraint.rule);
+
+      if (await rule.passes(constraint.args, value, index, target) === false) {
+        messages.push(await rule.message(constraint.args, value, index, target));
+      }
+    }
+
+    return messages;
   }
 }
 
 export const DEFAULT_VALIDATE_OPTIONS: ValidateOptions = {
   allowUnknown: true,
-  // stripUnknown: false,
-  // todo@ convert: true,
 };
 
 export interface ValidateOptions {
   allowUnknown?: boolean;
-  // stripUnknown?: boolean;
-  // todo@ convert?: boolean,
 }
 
 export interface ValidationError {
-  messages: { [key: string]: string; };
+  messages: string[];
   path: string;
 }
 
 export interface ValidationResult {
   errors: ValidationError[];
-  // value: unknown;
 }

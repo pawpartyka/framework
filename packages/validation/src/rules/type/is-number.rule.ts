@@ -21,7 +21,6 @@ export function IsNumber(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'isNumber',
     rule: IsNumberRule,
   };
 }

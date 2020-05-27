@@ -22,7 +22,6 @@ export function MinLength(min: number, options?: Pick<Constraint, 'message'>): C
   return {
     args: [min],
     message: options?.message,
-    name: 'minLength',
     rule: MinLengthRule,
   };
 }

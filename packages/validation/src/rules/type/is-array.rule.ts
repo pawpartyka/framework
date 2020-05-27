@@ -21,7 +21,6 @@ export function IsArray(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'isArray',
     rule: IsArrayRule,
   };
 }

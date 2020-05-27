@@ -14,6 +14,7 @@ export class IsBooleanRule implements Rule {
 }
 
 export function isBoolean(value: any): boolean {
+  console.log('ibv: ', value);
   return typeof value === 'boolean' || value instanceof Boolean;
 }
 
@@ -21,7 +22,6 @@ export function IsBoolean(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
-    name: 'isBoolean',
     rule: IsBooleanRule,
   };
 }

@@ -35,9 +35,11 @@ export * from './validation.package';
           street: 123,
         },
         pseudonims: [
-          { name: 'Mieszko', fine: true },
+          { name: 'Mieszko', fine: true, nested: [{ secret: 'siema' }] },
           { name: 'Wieszko', fine: true },
+          { name: 123, fine: false, nested: [{ secret: 'elo' }] },
           { name: 123, fine: false },
+          'siema',
         ],
       },
       {
@@ -58,33 +60,33 @@ export * from './validation.package';
       },
     )
     .then(result => {
-      console.log('object errors: ', result.errors);
+      console.log('object errors: ', JSON.stringify(result.errors, null, 4));
     });
 
-  validator
-    .validate(
-      [{ name: 'Paweł' }, { name: 'Ja' }, { name: 'Partyka' }],
-      { '*.name': [MinLength(3)] },
-    )
-    .then(result => {
-      console.log('object-array errors: ', result.errors);
-    });
+  // validator
+  //   .validate(
+  //     [{ name: 'Paweł' }, { name: 'Ja' }, { name: 'Partyka' }],
+  //     { '*.name': [MinLength(3)] },
+  //   )
+  //   .then(result => {
+  //     console.log('object-array errors: ', result.errors);
+  //   });
 
-  validator
-    .validate(
-      ['Paweł', 'Jan', 'Partyka'],
-      { '*': [MinLength(3)] },
-    )
-    .then(result => {
-      console.log('array errors: ', result.errors);
-    });
+  // validator
+  //   .validate(
+  //     ['Paweł', 'Jan', 'Partyka'],
+  //     { '*': [MinLength(3)] },
+  //   )
+  //   .then(result => {
+  //     console.log('array errors: ', result.errors);
+  //   });
 
-  validator
-    .validate(
-      {},
-      [Required(), MinLength(6)],
-    )
-    .then(result => {
-      console.log('string (primitive) errors: ', result.errors);
-    });
+  // validator
+  //   .validate(
+  //     {},
+  //     [Required(), MinLength(6)],
+  //   )
+  //   .then(result => {
+  //     console.log('string (primitive) errors: ', result.errors);
+  //   });
 })();

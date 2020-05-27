@@ -1,5 +1,6 @@
 import { Package, Provider, Type } from '@artisanjs/core';
 import { Rule } from './interfaces/rule.interface';
+import { MaxRule } from './rules/number/max.rule';
 import { MinRule } from './rules/number/min.rule';
 import { RequiredRule } from './rules/required.rule';
 import { MaxLengthRule } from './rules/string/max-length.rule';
@@ -13,6 +14,7 @@ import { Validator } from './services/validator.service';
 
 const BUILT_IN_RULES: Type<Rule>[] = [
   /* Number */
+  MaxRule,
   MinRule,
 
   /* String */
