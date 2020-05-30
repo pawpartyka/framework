@@ -5,13 +5,15 @@ import { Constraint } from '../../interfaces/schema.interface';
 @Injectable()
 export class IsObjectRule implements Rule {
   public message(args: any[], value: any, index: string, target: any): string {
-    return `The "${ index }" must be a object`;
+    return `The ${ index || 'value' } must be a object`;
   }
 
   public passes(args: any[], value: any, index: string, target: any): boolean {
     return isObject(value);
   }
 }
+
+export const IS_OBJECT: symbol = Symbol('is-object');
 
 export function isObject(value: any): boolean {
   return typeof value === 'object' || value instanceof Object;
@@ -21,6 +23,7 @@ export function IsObject(options?: Pick<Constraint, 'message'>): Constraint {
   return {
     args: [],
     message: options?.message,
+    name: IS_OBJECT,
     rule: IsObjectRule,
   };
 }
