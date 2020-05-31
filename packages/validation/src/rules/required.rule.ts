@@ -1,7 +1,5 @@
 import { Constraint } from '../interfaces/schema.interface';
 
-export const REQUIRED: symbol = Symbol('required');
-
 export function required(value: any): boolean {
   return value !== undefined;
 }
@@ -11,7 +9,7 @@ export function Required(options?: any): Constraint {
     return required(value) || options?.message || `The ${ index || 'value' } is required`;
   };
 
-  constraint['_id'] = REQUIRED;
+  constraint.implicit = true;
 
   return constraint;
 }

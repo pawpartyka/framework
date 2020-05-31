@@ -1,30 +1,10 @@
 import { Injectable } from '@artisanjs/core';
 import { Constraint, Schema } from '../interfaces/schema.interface';
-import { REQUIRED } from '../rules/required.rule';
 
 @Injectable()
 export class Validator {
   public async validate(data: any, schema: Schema, options: ValidateOptions = DEFAULT_VALIDATE_OPTIONS): Promise<ValidationResult> {
-    if (Array.isArray(schema)) {
-      const errors: ValidationError[] = [];
-      const messages: string[] = [];
-
-      for (const constraint of schema) {
-        const result: boolean | string = await constraint(data, null, data);
-
-        if (typeof result === 'string') {
-          messages.push(result);
-        }
-      }
-
-      if (messages.length) {
-        errors.push({ messages, path: null });
-      }
-
-      return { errors };
-    } else {
-      return { errors: await this.executeSchemaTree(data, [], this.parseSchemaTree(schema)) };
-    }
+    return { errors: await this.executeSchemaTree(data, [], this.parseSchemaTree(schema)) };
   }
 
   private async executeSchemaTree(data: any, pathTree: string[], schemaTree: SchemaTree): Promise<ValidationError[]> {
@@ -54,10 +34,11 @@ export class Validator {
           }
         }
       } else {
-        const required: boolean = constraints.some(it => it['_id'] === REQUIRED);
-        const value: any = data && data[expression];
+        const required: boolean = constraints.some(it => it.implicit);
+        const value: any = expression === '' ? data : (data && data[expression]);
+        const newPathTree: string[] = expression === '' ? [...pathTree] : [...pathTree, expression];
 
-        if (!value && required === false) {
+        if (value === undefined && required === false) {
           continue;
         }
 
@@ -72,11 +53,11 @@ export class Validator {
         }
 
         if (messages.length) {
-          errors.push({ messages, path: [...pathTree, expression].join('.') });
+          errors.push({ messages, path: newPathTree.join('.') });
         }
 
         if (Object.keys(children).length) {
-          errors.push(...await this.executeSchemaTree(value, [...pathTree, expression], children));
+          errors.push(...await this.executeSchemaTree(value, newPathTree, children));
         }
       }
     }
@@ -85,16 +66,21 @@ export class Validator {
   }
 
   private parseSchemaTree(schema: { [expression: string]: Constraint[] }): SchemaTree {
-    const schemaTree: SchemaTree = {};
+    const schemaTree: SchemaTree = {
+      '': {
+        children: {},
+        constraints: [],
+      },
+    };
 
     for (const [expression, constraints] of Object.entries(schema)) {
-      let schemaTreeBranch: SchemaTreeBranch;
+      let schemaTreeBranch: SchemaTreeBranch = schemaTree[''];
 
       const parts: string[] = expression.split('.');
 
       for (let index = 0; index < parts.length; index++) {
-        if (index === 0) {
-          schemaTreeBranch = schemaTree[parts[index]] = schemaTree[parts[index]] || { children: {}, constraints: [] };
+        if (index === 0 && parts[index] !== '') {
+          schemaTreeBranch = schemaTreeBranch.children[parts[index]] = schemaTreeBranch.children[parts[index]] || { children: {}, constraints: [] };
         }
 
         if (index === parts.length - 1) {
