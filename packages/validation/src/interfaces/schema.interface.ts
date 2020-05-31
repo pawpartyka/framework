@@ -1,13 +1,7 @@
-import { Type } from '@artisanjs/core';
-import { Rule } from './rule.interface';
-
 export interface Constraint {
-  args?: unknown[];
-  message?: string;
-  name: string | symbol;
-  rule: Type<Rule>;
+  (value: any, index: string, target: any): boolean | string | Promise<boolean | string>;
 }
 
 export interface Schema {
-  [path: string]: Constraint[];
+  [expression: string]: Constraint[];
 }

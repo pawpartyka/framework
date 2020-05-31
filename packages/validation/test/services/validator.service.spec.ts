@@ -1,6 +1,7 @@
 import { Test } from '@artisanjs/testing';
 import { Validator } from '../../src/services/validator.service';
 import { ValidationPackage } from '../../src/validation.package';
+import { Schema } from '../../src/interfaces/schema.interface';
 
 describe('Validator service', () => {
   let validator: Validator;
@@ -19,7 +20,23 @@ describe('Validator service', () => {
     validator = await app.find(Validator);
   });
 
-  it('test', () => {
-    expect(1).toBe(1);
+  describe('validate', () => {
+    describe('flatten', () => {
+      it('test', async () => {
+        const result = await validator.validate({}, { name: [] });
+
+        expect(result.errors.length).toBe(0);
+      });
+
+      it('test2', async () => {
+        const result = await validator.validate({}, { name: [] });
+
+        expect(result.errors.length).toBe(0);
+      });
+    });
+
+    // flat
+    // nested flat
+    // nested array
   });
 });

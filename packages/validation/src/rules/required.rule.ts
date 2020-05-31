@@ -1,17 +1,4 @@
-import { Injectable } from '@artisanjs/core';
-import { Rule } from '../interfaces/rule.interface';
 import { Constraint } from '../interfaces/schema.interface';
-
-@Injectable()
-export class RequiredRule implements Rule {
-  public message(args: any[], value: any, index: string, target: any): string {
-    return `The ${ index || 'value' } is required`;
-  }
-
-  public passes(args: any[], value: any, index: string, target: any): boolean {
-    return required(value);
-  }
-}
 
 export const REQUIRED: symbol = Symbol('required');
 
@@ -19,11 +6,12 @@ export function required(value: any): boolean {
   return value !== undefined;
 }
 
-export function Required(options?: Pick<Constraint, 'message'>): Constraint {
-  return {
-    args: [],
-    message: options?.message,
-    name: REQUIRED,
-    rule: RequiredRule,
+export function Required(options?: any): Constraint {
+  const constraint: Constraint = (value: any, index: string, target: any): boolean | string => {
+    return required(value) || options?.message || `The ${ index || 'value' } is required`;
   };
+
+  constraint['_id'] = REQUIRED;
+
+  return constraint;
 }

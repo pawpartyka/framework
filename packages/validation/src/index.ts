@@ -57,7 +57,8 @@ export * from './validation.package';
         'address.street': [Required(), MinLength(2)],
         'address.test': [Required(), IsObject()],
         'address.test.lorem': [Required(), IsNumber()],
-        'address.test.ipsum': [IsString()],
+        'address.test.ipsum': [Required(), IsString()],
+        'address.test.foo': [IsString()],
 
         'shipping': [], // shipping is optional
         'shipping.street': [MinLength(7), MaxLength(50)],
