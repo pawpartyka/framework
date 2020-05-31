@@ -9,11 +9,7 @@ export function minLength(value: any, min: number): boolean {
 
 export function MinLength(min: number, options?: any): Constraint {
   const constraint: Constraint = (value: any, index: string, target: any): boolean | string => {
-    if (minLength(value, min)) {
-      return true;
-    }
-
-    return options?.message || `The ${ index || 'value' } should have at least ${ min } characters`;
+    return minLength(value, min) || options?.message || `The ${ index || 'value' } should have at least ${ min } characters`;
   };
 
   constraint['_id'] = MIN_LENGTH;

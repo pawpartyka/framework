@@ -9,6 +9,7 @@ import { IsObject } from './rules/type/is-object.rule';
 import { IsString } from './rules/type/is-string.rule';
 import { Validator } from './services/validator.service';
 import { ValidationPackage } from './validation.package';
+import { IsArray } from './rules/type/is-array.rule';
 
 export * from './validation.package';
 
@@ -32,15 +33,16 @@ export * from './validation.package';
         username: '12321312',
         password: 'mas11',
         notAllowedValue: '123',
-        address: {
-          street: 'ulica 123',
+        // address: {
+        //   street: 'ulica 123',
           // test: { // required
-            // lorem: 123,
+          // lorem: 123,
           // },
-        },
+        // },
         shipping: {
           street: 'asdasdasd',
         },
+        asd: 123,
         pseudonims: [
           { name: 'Mieszko', fine: true, nested: [{ secret: 'siema123123123' }, { secret: 'asdasdas' }] },
           { name: 'Wieszko', fine: true },
@@ -50,7 +52,7 @@ export * from './validation.package';
         ],
       },
       {
-        'username': [Required(), MinLength(3)],
+        'username': [Required(), MinLength(3), value => `Wyjebalo blad ${ value }`],
         'password': [Required(), MinLength(5)],
 
         'address': [Required()],
@@ -58,10 +60,14 @@ export * from './validation.package';
         'address.test': [Required(), IsObject()],
         'address.test.lorem': [Required(), IsNumber()],
         'address.test.ipsum': [Required(), IsString()],
-        'address.test.foo': [IsString()],
+        'address.test.foo': [IsObject()],
+        'address.test.foo.213123123dasdasd1212dda': [Required(), IsString()],
 
         'shipping': [], // shipping is optional
         'shipping.street': [MinLength(7), MaxLength(50)],
+
+        'asd': [IsArray()],
+        'asd.*': [IsObject()],
 
         'pseudonims': [Required()],
         'pseudonims.*': [IsObject()], // or - validate
@@ -74,31 +80,31 @@ export * from './validation.package';
     4,
   ));
 
-  // console.log('object-array errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     [{ name: 'Paweł' }, { name: 'Ja' }, { name: 'Partyka' }],
-  //     { '*.name': [Required(), MinLength(3)] },
-  //   ),
-  //   null,
-  //   4,
-  // ));
-  //
-  // console.log('array errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     ['Paweł', 'Jan', 'Partyka', 'Elo'],
-  //     { '*': [MinLength(5)] },
-  //   ),
-  //   null,
-  //   4,
-  // ));
+  console.log('object-array errors: ', JSON.stringify(
+    await validator.validate(
+      [{ name: 'Paweł' }, { name: 'Ja' }, { name: 'Partyka' }],
+      { '*.name': [Required(), MinLength(3)] },
+    ),
+    null,
+    4,
+  ));
 
-  // console.log('string (primitive) errors: ', JSON.stringify(
-  //   validator.validate(
-  //     'siema',
-  //     [Required(), MinLength(6)],
-  //   ),
-  //   null,
-  //   4,
-  // ));
+  console.log('array errors: ', JSON.stringify(
+    await validator.validate(
+      ['Paweł', 'Jan', 'Partyka', 'Elo'],
+      { '*': [MinLength(5)] },
+    ),
+    null,
+    4,
+  ));
+
+  console.log('string (primitive) errors: ', JSON.stringify(
+    await validator.validate(
+      'siema',
+      [Required(), MinLength(6)],
+    ),
+    null,
+    4,
+  ));
   logger.info('end validation');
 })();

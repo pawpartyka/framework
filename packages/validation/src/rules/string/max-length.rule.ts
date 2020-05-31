@@ -9,11 +9,7 @@ export function maxLength(value: any, max: number): boolean {
 
 export function MaxLength(max: number, options?: { message: string }): Constraint {
   const constraint: Constraint = (value: any, index: string, target: any): boolean | string => {
-    if (maxLength(value, max)) {
-      return true;
-    }
-
-    return options?.message || `The ${ index || 'value' } should be shorter than or equal to ${ max } characters`;
+    return maxLength(value, max) || options?.message || `The ${ index || 'value' } should be shorter than or equal to ${ max } characters`;
   };
 
   constraint['_id'] = MAX_LENGTH;

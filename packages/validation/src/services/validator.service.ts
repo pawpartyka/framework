@@ -1,35 +1,70 @@
-import { Injectable} from '@artisanjs/core';
-import { Schema } from '../interfaces/schema.interface';
+import { Injectable } from '@artisanjs/core';
+import { Constraint, Schema } from '../interfaces/schema.interface';
 import { REQUIRED } from '../rules/required.rule';
 
 @Injectable()
 export class Validator {
-  public async validate(data: any | any[], schema: Schema, options: ValidateOptions = DEFAULT_VALIDATE_OPTIONS): Promise<ValidationResult> {
+  public async validate(data: any, schema: Schema, options: ValidateOptions = DEFAULT_VALIDATE_OPTIONS): Promise<ValidationResult> {
+    if (Array.isArray(schema)) {
+      const errors: ValidationError[] = [];
+      const messages: string[] = [];
+
+      for (const constraint of schema) {
+        const result: boolean | string = await constraint(data, null, data);
+
+        if (typeof result === 'string') {
+          messages.push(result);
+        }
+      }
+
+      if (messages.length) {
+        errors.push({ messages, path: null });
+      }
+
+      return { errors };
+    } else {
+      return { errors: await this.executeSchemaTree(data, [], this.parseSchemaTree(schema)) };
+    }
+  }
+
+  private async executeSchemaTree(data: any, pathTree: string[], schemaTree: SchemaTree): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
 
-    for (const [expression, constraints] of Object.entries(schema)) {
-      const isParentRequired: boolean = (schema[expression.split('.').slice(0, -1).join('.')] || []).some(it => it['_id'] === REQUIRED);
-      const isTargetRequired: boolean = constraints.some(it => it['_id'] === REQUIRED);
+    for (const [expression, { children, constraints }] of Object.entries(schemaTree)) {
+      if (expression === '*') {
+        for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
+          const messages: string[] = [];
 
-      for (const path of this.parse(expression, data)) {
-        const parts: string[] = path.split('.');
+          for (const constraint of constraints) {
+            const result: boolean | string = await constraint(value, null, data);
 
-        let parentValue: any = data;
-        let targetValue: any = data && data[parts[0]];
+            if (typeof result === 'string') {
+              messages.push(result);
+            }
+          }
 
-        for (let index = 1; index < parts.length; index++) {
-          parentValue = targetValue;
-          targetValue = targetValue && targetValue[parts[index]];
+          if (messages.length) {
+            errors.push({ messages, path: [...pathTree, index].join('.') });
+          }
         }
 
-        if ((!parentValue && isParentRequired === false) || (!targetValue && isTargetRequired === false)) {
+        if (Object.keys(children).length) {
+          for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
+            errors.push(...await this.executeSchemaTree(value, [...pathTree, index], children));
+          }
+        }
+      } else {
+        const required: boolean = constraints.some(it => it['_id'] === REQUIRED);
+        const value: any = data && data[expression];
+
+        if (!value && required === false) {
           continue;
         }
 
         const messages: string[] = [];
 
         for (const constraint of constraints) {
-          const result: boolean | string = await constraint(targetValue, parts[parts.length - 1], data);
+          const result: boolean | string = await constraint(value, expression, data);
 
           if (typeof result === 'string') {
             messages.push(result);
@@ -37,42 +72,55 @@ export class Validator {
         }
 
         if (messages.length) {
-          errors.push({ messages, path: path });
+          errors.push({ messages, path: [...pathTree, expression].join('.') });
+        }
+
+        if (Object.keys(children).length) {
+          errors.push(...await this.executeSchemaTree(value, [...pathTree, expression], children));
         }
       }
     }
 
-    return { errors };
+    return errors;
   }
 
-  private parse(path: string, data: any): string[] {
-    const paths: string[] = [];
+  private parseSchemaTree(schema: { [expression: string]: Constraint[] }): SchemaTree {
+    const schemaTree: SchemaTree = {};
 
-    if (path.includes('*')) {
-      let value: any = data;
+    for (const [expression, constraints] of Object.entries(schema)) {
+      let schemaTreeBranch: SchemaTreeBranch;
 
-      for (const part of path.split('.')) {
-        if (part === '*') {
-          for (const index of Object.keys(value || [])) {
-            paths.push(...this.parse(path.replace('*', index), data));
-          }
+      const parts: string[] = expression.split('.');
 
-          break;
+      for (let index = 0; index < parts.length; index++) {
+        if (index === 0) {
+          schemaTreeBranch = schemaTree[parts[index]] = schemaTree[parts[index]] || { children: {}, constraints: [] };
         }
 
-        value = value && value[part];
+        if (index === parts.length - 1) {
+          schemaTreeBranch.constraints = constraints;
+        } else {
+          schemaTreeBranch = schemaTreeBranch.children[parts[index + 1]] = schemaTreeBranch.children[parts[index + 1]] || { children: {}, constraints: [] };
+        }
       }
-    } else {
-      paths.push(path);
     }
 
-    return paths;
+    return schemaTree;
   }
 }
 
 export const DEFAULT_VALIDATE_OPTIONS: ValidateOptions = {
   allowUnknown: true,
 };
+
+export interface SchemaTree {
+  [expression: string]: SchemaTreeBranch;
+}
+
+export interface SchemaTreeBranch {
+  children: SchemaTree;
+  constraints: Constraint[];
+}
 
 export interface ValidateOptions {
   allowUnknown?: boolean;
