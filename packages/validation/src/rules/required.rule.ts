@@ -1,15 +1,19 @@
-import { Constraint } from '../interfaces/schema.interface';
+import { Rule, RuleOptions } from '../interfaces/rule.interface';
 
 export function required(value: any): boolean {
   return value !== undefined;
 }
 
-export function Required(options?: any): Constraint {
-  const constraint: Constraint = (value: any, index: string, target: any): boolean | string => {
-    return required(value) || options?.message || `The ${ index || 'value' } is required`;
+export function Required(options?: RuleOptions): Rule {
+  const rule: Rule = (value: any, index: string, target: any) => {
+    if (required(value)) {
+      return null;
+    }
+
+    return options?.message || `The ${ index || 'value' } is required`;
   };
 
-  constraint.implicit = true;
+  rule.implicit = true;
 
-  return constraint;
+  return rule;
 }

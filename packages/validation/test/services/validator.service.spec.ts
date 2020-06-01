@@ -1,7 +1,7 @@
 import { Test } from '@artisanjs/testing';
 import { Validator } from '../../src/services/validator.service';
 import { ValidationPackage } from '../../src/validation.package';
-import { Schema } from '../../src/interfaces/schema.interface';
+import { Schema } from '../../src/interfaces/rule.interface';
 
 describe('Validator service', () => {
   let validator: Validator;

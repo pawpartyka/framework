@@ -1,17 +1,21 @@
 import { ArtisanFactory, Logger } from '@artisanjs/core';
 import 'reflect-metadata';
+import { ArrayMinSize } from './rules/array/array-min-size.rule';
+import { Min } from './rules/number/min.rule';
+import { Allow } from './rules/object/allow.rule';
 import { Required } from './rules/required.rule';
+import { Length } from './rules/string/length.rule';
 import { MaxLength } from './rules/string/max-length.rule';
 import { MinLength } from './rules/string/min-length.rule';
-import { IsArray } from './rules/type/is-array.rule';
+import { isArray, IsArray } from './rules/type/is-array.rule';
 import { IsBoolean } from './rules/type/is-boolean.rule';
 import { IsNumber } from './rules/type/is-number.rule';
 import { IsObject } from './rules/type/is-object.rule';
 import { IsString } from './rules/type/is-string.rule';
 import { Validator } from './services/validator.service';
 import { ValidationPackage } from './validation.package';
-import { Min } from './rules/number/min.rule';
-import { ArrayMinSize } from './rules/array/array-min-size.rule';
+import { Conditional } from './rules/conditional.rule';
+import { compose } from './helpers/compose.helper';
 
 export * from './validation.package';
 
@@ -31,30 +35,9 @@ export * from './validation.package';
   logger.info('start validation');
   // console.log('object errors: ', JSON.stringify(
   //   await validator.validate(
+  //     undefined,
   //     {
-  //       username: '12321312',
-  //       password: 'mas11',
-  //       notAllowedValue: '123',
-  //       // address: {
-  //       //   street: 'ulica 123',
-  //       // test: { // required
-  //       // lorem: 123,
-  //       // },
-  //       // },
-  //       shipping: {
-  //         street: 'asdasdasd',
-  //       },
-  //       asd: 123,
-  //       pseudonims: [
-  //         { name: 'Mieszko', fine: true, nested: [{ secret: 'siema123123123' }, { secret: 'asdasdas' }] },
-  //         { name: 'Wieszko', fine: true },
-  //         { name: 123, fine: false, nested: [{ secret: 'elo1231232132131212' }] },
-  //         { name: 123, fine: false, nested: [] },
-  //         'siema',
-  //       ],
-  //     },
-  //     {
-  //       '': [IsObject()],
+  //       '': [Required(), IsObject()],
   //       'username': [Required(), MinLength(3), value => `Wyjebalo blad ${ value }`],
   //       'password': [Required(), MinLength(5)],
   //
@@ -78,6 +61,9 @@ export * from './validation.package';
   //       'pseudonims.*.fine': [IsBoolean()],
   //       'pseudonims.*.nested.*.secret': [MinLength(10)],
   //     },
+  //     {
+  //       allowUnknown: false,
+  //     },
   //   ),
   //   null,
   //   4,
@@ -85,11 +71,18 @@ export * from './validation.package';
 
   console.log('object-array errors: ', JSON.stringify(
     await validator.validate(
-      [{name: 'Pabl'}, {name: 'Part'}, {name: 'Test'}, { name: 'Ama' }],
+      [{ name: 'Pabl' }, { name: 'Pa' }, { name: 'Test' }, { name: 'wow', fine: true, lorem: 123 }],
       {
-        '': [Required(), IsObject(), ArrayMinSize(4)], // todo@ IsObject() -> bug!
-        '*': [IsObject()],
-        '*.name': [Required(), MinLength(3)],
+        '': [Required(), IsArray(), ArrayMinSize(4)],
+        '*': [IsObject(), Allow(['name'])],
+        '*.name': [
+          Conditional(value => value === 'wow', [MinLength(5)], [MinLength(10)]),
+          (value, index, target) => {
+            if (true) {
+              return compose([IsNumber(), IsBoolean()])(value, index, target);
+            }
+          },
+        ],
       },
     ),
     null,
@@ -99,7 +92,9 @@ export * from './validation.package';
   // console.log('array errors: ', JSON.stringify(
   //   await validator.validate(
   //     ['Paweł', 'Jan', 'Partyka', 'Elo'],
-  //     { '*': [MinLength(5)] },
+  //     {
+  //       '*': [MinLength(5)],
+  //     },
   //   ),
   //   null,
   //   4,
@@ -107,8 +102,10 @@ export * from './validation.package';
   //
   // console.log('string (primitive) errors: ', JSON.stringify(
   //   await validator.validate(
-  //     'siema',
-  //     { '': [Required(), Min(6), IsNumber()] },
+  //     6,
+  //     {
+  //       '': [Required(), Min(6), IsNumber()],
+  //     },
   //   ),
   //   null,
   //   4,
