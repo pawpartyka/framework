@@ -1,21 +1,22 @@
 import { ArtisanFactory, Logger } from '@artisanjs/core';
 import 'reflect-metadata';
+import { compose } from './helpers/compose.helper';
 import { ArrayMinSize } from './rules/array/array-min-size.rule';
+import { Conditional } from './rules/conditional.rule';
 import { Min } from './rules/number/min.rule';
-import { Allow } from './rules/object/allow.rule';
+import { Only } from './rules/object/only.rule';
 import { Required } from './rules/required.rule';
 import { Length } from './rules/string/length.rule';
 import { MaxLength } from './rules/string/max-length.rule';
 import { MinLength } from './rules/string/min-length.rule';
-import { isArray, IsArray } from './rules/type/is-array.rule';
+import { IsArray } from './rules/type/is-array.rule';
 import { IsBoolean } from './rules/type/is-boolean.rule';
 import { IsNumber } from './rules/type/is-number.rule';
 import { IsObject } from './rules/type/is-object.rule';
 import { IsString } from './rules/type/is-string.rule';
+import { ValidateIf } from './rules/validate-if.rule';
 import { Validator } from './services/validator.service';
 import { ValidationPackage } from './validation.package';
-import { Conditional } from './rules/conditional.rule';
-import { compose } from './helpers/compose.helper';
 
 export * from './validation.package';
 
@@ -71,10 +72,10 @@ export * from './validation.package';
 
   console.log('object-array errors: ', JSON.stringify(
     await validator.validate(
-      [{ name: 'Pabl' }, { name: 'Pa' }, { name: 'Test' }, { name: 'wow', fine: true, lorem: 123 }],
+      [{ name: 'Pabl' }, { name: 'Pa' }, { name: 'Test', fine: false }, { name: 'wow', fine: false, lorem: 123 }],
       {
-        '': [Required(), IsArray(), ArrayMinSize(4)],
-        '*': [IsObject(), Allow(['name'])],
+        '': [Required(), IsArray(), ArrayMinSize(5)],
+        '*': [IsObject(), Only(['name', 'fine'])],
         '*.name': [
           Conditional(value => value === 'wow', [MinLength(5)], [MinLength(10)]),
           (value, index, target) => {
@@ -83,6 +84,7 @@ export * from './validation.package';
             }
           },
         ],
+        '*.fine': [ValidateIf(value => value, [IsString()])],
       },
     ),
     null,

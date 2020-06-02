@@ -1,15 +1,11 @@
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
-export function arrayMinSize(value: any, minimum: number): boolean {
-  return Array.isArray(value) && value.length >= minimum;
-}
-
-export function ArrayMinSize(minimum: number, options?: RuleOptions): Rule {
+export function ArrayMinSize(min: number, options?: RuleOptions): Rule {
   return (value: any, index: string, target: any) => {
-    if (arrayMinSize(value, minimum)) {
+    if (Array.isArray(value) && value.length >= min) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } must contain at least ${ minimum } elements`;
+    return options?.message || `The ${ index || 'value' } must contain at least ${ min } elements`;
   };
 }

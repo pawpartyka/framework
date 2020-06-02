@@ -1,12 +1,8 @@
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
-export function isDate(value: any): boolean {
-  return value instanceof Date;
-}
-
 export function IsDate(options?: RuleOptions): Rule {
   return (value: any, index: string, target: any) => {
-    if (isDate(value)) {
+    if (value instanceof Date) {
       return null;
     }
 
