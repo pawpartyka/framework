@@ -56,57 +56,57 @@ export * from './validation.package';
         'address.test.foo': [IsObject()],
         'address.test.foo.213123123dasdasd1212dda': [RequiredIf(control => control.parent.value), IsString()],
 
-        // 'shipping': [], // shipping is optional
-        // 'shipping.street': [MinLength(7), MaxLength(50)],
+        'shipping': [], // shipping is optional
+        'shipping.street': [MinLength(7), MaxLength(50)],
 
-        // 'asd': [IsArray()],
-        // 'asd.*': [IsObject()],
-        //
-        // 'pseudonims': [Required()],
-        // 'pseudonims.*': [IsObject()], // or - validate
-        // 'pseudonims.*.name': [Required()],
-        // 'pseudonims.*.fine': [IsBoolean()],
-        // 'pseudonims.*.nested.*.secret': [MinLength(10)],
+        'asd': [IsArray()],
+        'asd.*': [IsObject()],
+
+        'pseudonims': [Required(), ArrayMinSize(2)],
+        'pseudonims.*': [IsObject()], // or - validate
+        'pseudonims.*.name': [Required()],
+        'pseudonims.*.fine': [IsBoolean()],
+        'pseudonims.*.nested.*.secret': [MinLength(10)],
       },
     ),
     null,
     4,
   ));
 
-  // console.log('object-array errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     null,
-  //     {
-  //       '': [Required(), IsString(), ArrayMinSize(5)],
-  //       // '*': [IsObject(), Only(['name', 'fine'])],
-  //       '*.name': [Required(), IsString()],
-  //       '*.fine': [Required(), IsBoolean(), IsString()],
-  //     },
-  //   ),
-  //   null,
-  //   4,
-  // ));
+  console.log('object-array errors: ', JSON.stringify(
+    await validator.validate(
+      null,
+      {
+        '': [Required(), IsString(), ArrayMinSize(5)],
+        // '*': [IsObject(), Only(['name', 'fine'])],
+        '*.name': [Required(), IsString()],
+        '*.fine': [Required(), IsBoolean(), IsString()],
+      },
+    ),
+    null,
+    4,
+  ));
 
-  // console.log('array errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     ['Paweł', 'Jan', 'Partyka', 'Elo'],
-  //     {
-  //       '*': [MinLength(5)],
-  //     },
-  //   ),
-  //   null,
-  //   4,
-  // ));
-  //
-  // console.log('string (primitive) errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     6,
-  //     {
-  //       '': [Required(), Min(6), IsNumber()],
-  //     },
-  //   ),
-  //   null,
-  //   4,
-  // ));
+  console.log('array errors: ', JSON.stringify(
+    await validator.validate(
+      ['Paweł', 'Jan', 'Partyka', 'Elo'],
+      {
+        '*': [MinLength(5)],
+      },
+    ),
+    null,
+    4,
+  ));
+
+  console.log('string (primitive) errors: ', JSON.stringify(
+    await validator.validate(
+      5,
+      {
+        '': [Required(), Min(6), IsNumber()],
+      },
+    ),
+    null,
+    4,
+  ));
   logger.info('end validation');
 })();

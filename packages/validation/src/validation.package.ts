@@ -1,4 +1,4 @@
-import { Package, Provider, Type } from '@artisanjs/core';
+import { Package, Provider } from '@artisanjs/core';
 import { Validator } from './services/validator.service';
 
 export class ValidationPackage {
