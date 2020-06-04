@@ -8,6 +8,10 @@ export function Length(min: number, max: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must be longer than or equal to ${ min } and shorter than or equal to ${ max } characters`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must be longer than or equal to ${ min } and shorter than or equal to ${ max } characters`;
   };
 }

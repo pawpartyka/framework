@@ -4,7 +4,7 @@ import { Rule, RuleOptions } from '../interfaces/rule.interface';
 
 export function ValidateIf(condition: (control: Control) => boolean | Promise<boolean>, rules: Rule[]): Rule {
   return async (control: Control) => {
-    if (await condition(control) === true) {
+    if (!!await condition(control)) {
       return await compose(rules)(control);
     }
 

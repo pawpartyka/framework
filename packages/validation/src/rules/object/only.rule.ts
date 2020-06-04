@@ -19,6 +19,10 @@ export function Only(properties: string[], options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value contains not allowed properties: ${ foreign.join(', ') }`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } contains not allowed properties: ${ foreign.join(', ') }`;
   };
 }

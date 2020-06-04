@@ -7,6 +7,10 @@ export function Required(options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value is required`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } is required`;
   };
 }

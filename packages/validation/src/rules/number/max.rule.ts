@@ -7,6 +7,10 @@ export function Max(max: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value should ${ max }`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } should ${ max }`;
   };
 }

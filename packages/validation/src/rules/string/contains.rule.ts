@@ -8,6 +8,10 @@ export function Contains(seed: string, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must contain a ${ seed } string`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must contain a ${ seed } string`;
   };
 }

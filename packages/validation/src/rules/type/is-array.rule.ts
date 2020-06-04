@@ -7,6 +7,10 @@ export function IsArray(options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must be an array`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must be an array`;
   };
 }

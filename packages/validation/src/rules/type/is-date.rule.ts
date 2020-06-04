@@ -7,6 +7,10 @@ export function IsDate(options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must be a date instance`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must be a date instance`;
   };
 }

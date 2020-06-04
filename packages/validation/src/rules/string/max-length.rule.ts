@@ -8,6 +8,10 @@ export function MaxLength(max: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value should be shorter than or equal to ${ max } characters`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } should be shorter than or equal to ${ max } characters`;
   };
 }

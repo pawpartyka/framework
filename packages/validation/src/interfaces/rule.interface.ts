@@ -5,5 +5,5 @@ export interface Rule {
 }
 
 export interface RuleOptions {
-  message?: string;
+  message?: string | ((control: Control) => string);
 }

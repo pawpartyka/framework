@@ -7,6 +7,10 @@ export function ArrayMaxSize(max: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must contain not more than ${ max } elements`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must contain not more than ${ max } elements`;
   };
 }

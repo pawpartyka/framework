@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { ArrayMinSize } from './rules/array/array-min-size.rule';
 import { Min } from './rules/number/min.rule';
 import { Only } from './rules/object/only.rule';
+import { RequiredIf } from './rules/required-if.rule';
 import { Required } from './rules/required.rule';
 import { Length } from './rules/string/length.rule';
 import { MaxLength } from './rules/string/max-length.rule';
@@ -12,10 +13,9 @@ import { IsBoolean } from './rules/type/is-boolean.rule';
 import { IsNumber } from './rules/type/is-number.rule';
 import { IsObject } from './rules/type/is-object.rule';
 import { IsString } from './rules/type/is-string.rule';
+import { ValidateIf } from './rules/validate-if.rule';
 import { Validator } from './services/validator.service';
 import { ValidationPackage } from './validation.package';
-import { RequiredIf } from './rules/required-if.rule';
-import { ValidateIf } from './rules/validate-if.rule';
 
 export * from './validation.package';
 
@@ -36,36 +36,25 @@ export * from './validation.package';
   console.log('object errors: ', JSON.stringify(
     await validator.validate(
       {
-        username: 'lore',
+        // username: 'lore',
         // password: 'wow1',
         address: {
-          test: 123,
+        //   test: 123,
+        //   foo: {}
         },
       },
       {
-        '': [Required(), IsObject(), control => {
-          console.log(':', control);
-          return null;
-        }],
-        'username': [ValidateIf(control => control.parent.value.password === 'wow', [MinLength(10)]), control => {
-          console.log('username:', control);
-          return null;
-        }],
+        '': [Required(), IsObject()],
+        'username': [ValidateIf(control => control.parent.value.password === 'wow', [MinLength(10)])],
         'password': [RequiredIf(control => control.parent.value.username), MinLength(5)],
 
-        'address': [Required(), control => {
-          console.log('address:', control);
-          return null;
-        }],
-        'address.street': [Required(), MinLength(2), control => {
-          console.log('address.street:', control);
-          return null;
-        }],
-        // 'address.test': [Required(), IsObject()],
-        // 'address.test.lorem': [Required(), IsNumber()],
-        // 'address.test.ipsum': [Required(), IsString()],
-        // 'address.test.foo': [IsObject()],
-        // 'address.test.foo.213123123dasdasd1212dda': [Required(), IsString()],
+        'address': [Required()],
+        'address.street': [RequiredIf(control => control.parent.value), MinLength(2)],
+        'address.test': [RequiredIf(control => control.parent.value), IsObject()],
+        'address.test.lorem': [RequiredIf(control => control.parent.value), IsNumber()],
+        'address.test.ipsum': [RequiredIf(control => control.parent.value), IsString()],
+        'address.test.foo': [IsObject()],
+        'address.test.foo.213123123dasdasd1212dda': [RequiredIf(control => control.parent.value), IsString()],
 
         // 'shipping': [], // shipping is optional
         // 'shipping.street': [MinLength(7), MaxLength(50)],

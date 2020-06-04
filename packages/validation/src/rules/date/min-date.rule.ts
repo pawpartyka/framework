@@ -7,6 +7,10 @@ export function MinDate(min: Date, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must contain date greater than or equal to ${ min }`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must contain date greater than or equal to ${ min }`;
   };
 }

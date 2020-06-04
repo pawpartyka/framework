@@ -7,6 +7,10 @@ export function ArrayMinSize(min: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value must contain at least ${ min } elements`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } must contain at least ${ min } elements`;
   };
 }

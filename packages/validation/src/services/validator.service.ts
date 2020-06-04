@@ -8,6 +8,9 @@ export class Validator {
     const schemaTree: SchemaTree = this.parseSchemaTree(schema);
 
     const root: Control = {
+      parent: null,
+      property: null,
+      root: null,
       value: data,
     };
 
@@ -22,6 +25,7 @@ export class Validator {
         for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
           const control: Control = {
             parent: parent,
+            property: index,
             root: root,
             value: value,
           };
@@ -45,6 +49,7 @@ export class Validator {
           for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
             const control: Control = {
               parent: parent,
+              property: index,
               root: root,
               value: value,
             };
@@ -58,6 +63,7 @@ export class Validator {
 
         const control: Control = expression === '' ? parent : {
           parent: parent,
+          property: expression,
           root: root,
           value: value,
         };
@@ -74,10 +80,6 @@ export class Validator {
 
         if (messages.length) {
           errors.push({ messages, path: newPathTree.join('.') });
-        }
-
-        if (value === undefined) {
-          continue;
         }
 
         if (Object.keys(children).length) {

@@ -8,6 +8,10 @@ export function MinLength(min: number, options?: RuleOptions): Rule {
       return null;
     }
 
-    return options?.message || `The value should have at least ${ min } characters`;
+    if (options?.message) {
+      return typeof options.message === 'string' ? options.message : options?.message(control);
+    }
+
+    return `The ${ control.property || 'value' } should have at least ${ min } characters`;
   };
 }
