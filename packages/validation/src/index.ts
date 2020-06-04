@@ -1,8 +1,6 @@
 import { ArtisanFactory, Logger } from '@artisanjs/core';
 import 'reflect-metadata';
-import { compose } from './helpers/compose.helper';
 import { ArrayMinSize } from './rules/array/array-min-size.rule';
-import { Conditional } from './rules/conditional.rule';
 import { Min } from './rules/number/min.rule';
 import { Only } from './rules/object/only.rule';
 import { Required } from './rules/required.rule';
@@ -14,9 +12,10 @@ import { IsBoolean } from './rules/type/is-boolean.rule';
 import { IsNumber } from './rules/type/is-number.rule';
 import { IsObject } from './rules/type/is-object.rule';
 import { IsString } from './rules/type/is-string.rule';
-import { ValidateIf } from './rules/validate-if.rule';
 import { Validator } from './services/validator.service';
 import { ValidationPackage } from './validation.package';
+import { RequiredIf } from './rules/required-if.rule';
+import { ValidateIf } from './rules/validate-if.rule';
 
 export * from './validation.package';
 
@@ -34,62 +33,70 @@ export * from './validation.package';
 
   /* EXAMPLE */
   logger.info('start validation');
-  // console.log('object errors: ', JSON.stringify(
-  //   await validator.validate(
-  //     undefined,
-  //     {
-  //       '': [Required(), IsObject()],
-  //       'username': [Required(), MinLength(3), value => `Wyjebalo blad ${ value }`],
-  //       'password': [Required(), MinLength(5)],
-  //
-  //       'address': [Required()],
-  //       'address.street': [Required(), MinLength(2)],
-  //       'address.test': [Required(), IsObject()],
-  //       'address.test.lorem': [Required(), IsNumber()],
-  //       'address.test.ipsum': [Required(), IsString()],
-  //       'address.test.foo': [IsObject()],
-  //       'address.test.foo.213123123dasdasd1212dda': [Required(), IsString()],
-  //
-  //       'shipping': [], // shipping is optional
-  //       'shipping.street': [MinLength(7), MaxLength(50)],
-  //
-  //       'asd': [IsArray()],
-  //       'asd.*': [IsObject()],
-  //
-  //       'pseudonims': [Required()],
-  //       'pseudonims.*': [IsObject()], // or - validate
-  //       'pseudonims.*.name': [Required()],
-  //       'pseudonims.*.fine': [IsBoolean()],
-  //       'pseudonims.*.nested.*.secret': [MinLength(10)],
-  //     },
-  //     {
-  //       allowUnknown: false,
-  //     },
-  //   ),
-  //   null,
-  //   4,
-  // ));
-
-  console.log('object-array errors: ', JSON.stringify(
+  console.log('object errors: ', JSON.stringify(
     await validator.validate(
-      [{ name: 'Pabl' }, { name: 'Pa' }, { name: 'Test', fine: false }, { name: 'wow', fine: false, lorem: 123 }],
       {
-        '': [Required(), IsArray(), ArrayMinSize(5)],
-        '*': [IsObject(), Only(['name', 'fine'])],
-        '*.name': [
-          Conditional(value => value === 'wow', [MinLength(5)], [MinLength(10)]),
-          (value, index, target) => {
-            if (true) {
-              return compose([IsNumber(), IsBoolean()])(value, index, target);
-            }
-          },
-        ],
-        '*.fine': [ValidateIf(value => value, [IsString()])],
+        username: 'lore',
+        // password: 'wow1',
+        address: {
+          test: 123,
+        },
+      },
+      {
+        '': [Required(), IsObject(), control => {
+          console.log(':', control);
+          return null;
+        }],
+        'username': [ValidateIf(control => control.parent.value.password === 'wow', [MinLength(10)]), control => {
+          console.log('username:', control);
+          return null;
+        }],
+        'password': [RequiredIf(control => control.parent.value.username), MinLength(5)],
+
+        'address': [Required(), control => {
+          console.log('address:', control);
+          return null;
+        }],
+        'address.street': [Required(), MinLength(2), control => {
+          console.log('address.street:', control);
+          return null;
+        }],
+        // 'address.test': [Required(), IsObject()],
+        // 'address.test.lorem': [Required(), IsNumber()],
+        // 'address.test.ipsum': [Required(), IsString()],
+        // 'address.test.foo': [IsObject()],
+        // 'address.test.foo.213123123dasdasd1212dda': [Required(), IsString()],
+
+        // 'shipping': [], // shipping is optional
+        // 'shipping.street': [MinLength(7), MaxLength(50)],
+
+        // 'asd': [IsArray()],
+        // 'asd.*': [IsObject()],
+        //
+        // 'pseudonims': [Required()],
+        // 'pseudonims.*': [IsObject()], // or - validate
+        // 'pseudonims.*.name': [Required()],
+        // 'pseudonims.*.fine': [IsBoolean()],
+        // 'pseudonims.*.nested.*.secret': [MinLength(10)],
       },
     ),
     null,
     4,
   ));
+
+  // console.log('object-array errors: ', JSON.stringify(
+  //   await validator.validate(
+  //     null,
+  //     {
+  //       '': [Required(), IsString(), ArrayMinSize(5)],
+  //       // '*': [IsObject(), Only(['name', 'fine'])],
+  //       '*.name': [Required(), IsString()],
+  //       '*.fine': [Required(), IsBoolean(), IsString()],
+  //     },
+  //   ),
+  //   null,
+  //   4,
+  // ));
 
   // console.log('array errors: ', JSON.stringify(
   //   await validator.validate(

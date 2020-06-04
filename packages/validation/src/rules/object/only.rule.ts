@@ -1,20 +1,24 @@
+import { Control } from '../../interfaces/control.interface';
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
 export function Only(properties: string[], options?: RuleOptions): Rule {
-  return (value: any, index: string, target: any) => {
-    const keys: string[] = Object.keys(value);
-    const notAllowed: string[] = [];
-
-    for (const key of keys) {
-      if (properties.includes(key) === false) {
-        notAllowed.push(key);
-      }
-    }
-
-    if (notAllowed.length === 0) {
+  return (control: Control) => {
+    if (control.value === undefined) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } contains not allowed properties: ${ notAllowed.join(', ') }`;
+    const foreign: string[] = [];
+
+    for (const key of Object.keys(control.value)) {
+      if (properties.includes(key) === false) {
+        foreign.push(key);
+      }
+    }
+
+    if (foreign.length === 0) {
+      return null;
+    }
+
+    return options?.message || `The value contains not allowed properties: ${ foreign.join(', ') }`;
   };
 }

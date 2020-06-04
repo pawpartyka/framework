@@ -1,15 +1,12 @@
+import { Control } from '../interfaces/control.interface';
 import { Rule, RuleOptions } from '../interfaces/rule.interface';
 
 export function Required(options?: RuleOptions): Rule {
-  const rule: Rule = (value: any, index: string, target: any) => {
-    if (value !== undefined) {
+  return (control: Control) => {
+    if (control.value !== undefined) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } is required`;
+    return options?.message || `The value is required`;
   };
-
-  rule.implicit = true;
-
-  return rule;
 }

@@ -1,7 +1,7 @@
-export interface Rule {
-  implicit?: boolean;
+import { Control } from './control.interface';
 
-  (value: any, index: string, target: any): null | string | string[] | Promise<null | string | string[]>;
+export interface Rule {
+  (control: Control): null | string | string[] | Promise<null | string | string[]>;
 }
 
 export interface RuleOptions {

@@ -1,11 +1,12 @@
+import { Control } from '../../interfaces/control.interface';
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
 export function IsObject(options?: RuleOptions): Rule {
-  return (value: any, index: string, target: any) => {
-    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+  return (control: Control) => {
+    if (control.value === undefined || typeof control.value === 'object' && control.value !== null && !Array.isArray(control.value)) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } must be a object`;
+    return options?.message || `The value must be a object`;
   };
 }

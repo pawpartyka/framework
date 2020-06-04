@@ -1,11 +1,12 @@
+import { Control } from '../../interfaces/control.interface';
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
 export function IsString(options?: RuleOptions): Rule {
-  return (value: any, index: string, target: any) => {
-    if (typeof value === 'string' || value instanceof String) {
+  return (control: Control) => {
+    if (control.value === undefined || typeof control.value === 'string' || control.value instanceof String) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } must be a string`;
+    return options?.message || `The value must be a string`;
   };
 }

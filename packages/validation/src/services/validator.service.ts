@@ -1,22 +1,35 @@
 import { Injectable } from '@artisanjs/core';
+import { Control } from '../interfaces/control.interface';
 import { Rule } from '../interfaces/rule.interface';
 
 @Injectable()
 export class Validator {
   public async validate(data: any, schema: Schema): Promise<ValidationResult> {
-    return { errors: await this.executeSchemaTree(data, [], this.parseSchemaTree(schema)) };
+    const schemaTree: SchemaTree = this.parseSchemaTree(schema);
+
+    const root: Control = {
+      value: data,
+    };
+
+    return { errors: await this.executeSchemaTree(data, root, root, [], schemaTree) };
   }
 
-  private async executeSchemaTree(data: any, pathTree: string[], schemaTree: SchemaTree): Promise<ValidationError[]> {
+  private async executeSchemaTree(data: any, root: Control, parent: Control, pathTree: string[], schemaTree: SchemaTree): Promise<ValidationError[]> {
     const errors: ValidationError[] = [];
 
     for (const [expression, { children, rules }] of Object.entries(schemaTree)) {
       if (expression === '*') {
         for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
+          const control: Control = {
+            parent: parent,
+            root: root,
+            value: value,
+          };
+
           const messages: string[] = [];
 
           for (const rule of rules) {
-            const result: null | string | string[] = await rule(value, null, data);
+            const result: null | string | string[] = await rule(control);
 
             if (result !== null) {
               messages.push(...Array.isArray(result) ? result : [result]);
@@ -30,22 +43,29 @@ export class Validator {
 
         if (Object.keys(children).length) {
           for (const [index, value] of Object.entries(Array.isArray(data) ? data : [])) {
-            errors.push(...await this.executeSchemaTree(value, [...pathTree, index], children));
+            const control: Control = {
+              parent: parent,
+              root: root,
+              value: value,
+            };
+
+            errors.push(...await this.executeSchemaTree(value, root, control, [...pathTree, index], children));
           }
         }
       } else {
-        const required: boolean = rules.some(it => it.implicit);
-        const value: any = expression === '' ? data : (data && data[expression]);
         const newPathTree: string[] = expression === '' ? [...pathTree] : [...pathTree, expression];
+        const value: any = expression === '' ? data : (data && data[expression]);
 
-        if (value === undefined && required === false) {
-          continue;
-        }
+        const control: Control = expression === '' ? parent : {
+          parent: parent,
+          root: root,
+          value: value,
+        };
 
         const messages: string[] = [];
 
         for (const rule of rules) {
-          const result: null | string | string[] | Rule = await rule(value, expression, data);
+          const result: null | string | string[] | Rule = await rule(control);
 
           if (result !== null) {
             messages.push(...Array.isArray(result) ? result : [result]);
@@ -56,8 +76,12 @@ export class Validator {
           errors.push({ messages, path: newPathTree.join('.') });
         }
 
+        if (value === undefined) {
+          continue;
+        }
+
         if (Object.keys(children).length) {
-          errors.push(...await this.executeSchemaTree(value, newPathTree, children));
+          errors.push(...await this.executeSchemaTree(value, root, control, newPathTree, children));
         }
       }
     }

@@ -1,11 +1,12 @@
+import { Control } from '../../interfaces/control.interface';
 import { Rule, RuleOptions } from '../../interfaces/rule.interface';
 
 export function IsArray(options?: RuleOptions): Rule {
-  return (value: any, index: string, target: any) => {
-    if (Array.isArray(value)) {
+  return (control: Control) => {
+    if (control.value === undefined || Array.isArray(control.value)) {
       return null;
     }
 
-    return options?.message || `The ${ index || 'value' } must be an array`;
+    return options?.message || `The value must be an array`;
   };
 }
