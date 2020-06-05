@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/artisanjs/artisanjs-bull.git"
+    "url": "git+https://github.com/artisanjs/artisan.git"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
