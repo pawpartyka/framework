@@ -1,6 +1,13 @@
 {
   "name": "root",
-  "private": true,
+  "homepage": "https://artisanjs.io",
+  "description": "Next generation framework for node.js",
+  "author": "Paweł Partyka",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artisanjs/artisan.git"
+  },
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
