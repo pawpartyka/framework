@@ -1,0 +1,17 @@
+import { Application } from '@artisanjs/core';
+import { Test } from '@artisanjs/testing';
+import { <%= classify(name) %>Service } from './<%= dasherize(name) %>.service';
+
+describe('<%= classify(name) %>Service', () => {
+  let <%= camelize(name) %>Service: <%= classify(name) %>Service;
+
+  beforeAll(async () => {
+    const app: Application = await Test
+      .configureTestingApplication({
+        providers: [<%= classify(name) %>Service],
+      })
+      .compile();
+
+    <%= camelize(name) %>Service = await app.find(<%= classify(name) %>Service);
+  });
+});

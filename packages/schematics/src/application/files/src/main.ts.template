@@ -1,0 +1,14 @@
+import { Application, ArtisanFactory } from '@artisanjs/core';
+import { AppService } from './services/app.service.ts.template';
+
+(async (): Promise<void> => {
+  const app: Application = await ArtisanFactory
+    .configureApplication({
+      providers: [
+        AppService,
+      ],
+    })
+    .compile();
+
+  await app.listen();
+})();

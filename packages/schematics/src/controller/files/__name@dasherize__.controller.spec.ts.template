@@ -1,0 +1,19 @@
+import { Application } from '@artisanjs/core';
+import { HttpServerPackage } from '@artisanjs/http-server';
+import { Test } from '@artisanjs/testing';
+import { <%= classify(name) %>Controller } from './<%= dasherize(name) %>.controller';
+
+describe('<%= classify(name) %>Controller', () => {
+  let <%= camelize(name) %>Controller: <%= classify(name) %>Controller;
+
+  beforeAll(async () => {
+    const app: Application = await Test
+      .configureTestingApplication({
+        packages: [HttpServerPackage.configure().register()],
+        providers: [<%= classify(name) %>Controller],
+      })
+      .compile();
+
+    <%= camelize(name) %>Controller = await app.find(<%= classify(name) %>Controller);
+  });
+});

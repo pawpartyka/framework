@@ -1,0 +1,21 @@
+import { Application } from '@artisanjs/core';
+import { Test } from '@artisanjs/testing';
+import { AppService } from '../../src/services/app.service.ts.template';
+
+describe('AppService', () => {
+  let appService: AppService;
+
+  beforeAll(async () => {
+    const app: Application = await Test
+      .configureTestingApplication({
+        providers: [AppService],
+      })
+      .compile();
+
+    appService = await app.find(AppService);
+  });
+
+  it('hello', () => {
+    expect(appService.hello()).toBe('Hello World!');
+  });
+});

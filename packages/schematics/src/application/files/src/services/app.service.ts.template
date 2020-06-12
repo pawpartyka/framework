@@ -1,0 +1,8 @@
+import { Injectable } from '@artisanjs/core';
+
+@Injectable()
+export class AppService {
+  public hello(): string {
+    return 'Hello World!';
+  }
+}

@@ -1,0 +1,5 @@
+import { Injectable } from '@artisanjs/core';
+
+@Injectable()
+export class <%= classify(name) %>Service {
+}

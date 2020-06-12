@@ -1,0 +1,27 @@
+# Artisan Framework
+Next generation framework for node.js
+
+## Installation
+
+```bash
+$ npm install
+```
+
+## Start
+
+```bash
+$ npm run start
+```
+
+## Test
+
+```bash
+# test
+$ npm run test
+
+# test watch
+$ npm run test:watch
+
+# test coverage
+$ npm run test:coverage
+```
