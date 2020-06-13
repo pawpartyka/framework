@@ -1,12 +1,24 @@
 {
-  "name": "<%= name %>",
-  "version": "0.0.0",
-  "description": "TypeScript starter",
+  "name": "@artisanjs/cli",
+  "version": "0.0.6",
+  "homepage": "https://artisanjs.io",
+  "description": "Next generation framework for node.js",
+  "author": "Paweł Partyka",
   "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artisanjs/artisan.git"
+  },
+  "bin": {
+    "artisan": "dist/index.js"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.json",
-    "start": "ts-node src/main.ts.template",
+    "postbuild": "cpx 'src/**/*.{template,json}' 'dist/'",
+    "start": "ts-node src/index.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
     "test": "jest",
@@ -15,15 +27,24 @@
     "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand"
   },
   "dependencies": {
-    "@artisanjs/core": "^1.0.0-rc.2",
-    "@artisanjs/testing": "^1.0.0-rc.0",
-    "reflect-metadata": "^0.1.13"
+    "@angular-devkit/core": "^9.1.7",
+    "@angular-devkit/schematics": "^9.1.7",
+    "@angular-devkit/schematics-cli": "^0.901.7",
+    "commander": "^5.1.0",
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.1.0",
+    "ora": "^4.0.4",
+    "webpack": "^4.43.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^6.5.0",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
+    "@types/webpack": "^4.41.17",
+    "cpx": "^1.5.0",
     "husky": "^4.0.10",
     "jest": "^24.9.0",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.3.0",
     "ts-node": "^8.6.1",
@@ -48,5 +69,6 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "schematics": "./schematics.json"
 }

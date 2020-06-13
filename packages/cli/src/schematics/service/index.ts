@@ -10,7 +10,7 @@ export function service(options: ServiceSchema): Rule {
 
     return mergeWith(apply(url('./files'), [
       options.skipTests ? filter(it => !it.endsWith('.spec.ts.template')) : noop(),
-      applyTemplates({ ...strings, name: options.name }),
+      applyTemplates({ ...strings, name: name }),
       move(path),
     ]));
   };
