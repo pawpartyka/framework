@@ -1,5 +1,5 @@
-import * as bull from 'bull';
-import * as redis from 'ioredis';
+import bull from 'bull';
+import redis from 'ioredis';
 import { JobOptions } from '../interfaces/job-options.interface';
 import { Job } from '../interfaces/job.interface';
 import { AddOptions, JobCounts, JobInformation, JobLogs, JobStatusClean, ProcessOptions, Queue, RemoveRepeatableOptions } from '../interfaces/queue.interface';

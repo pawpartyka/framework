@@ -1,4 +1,4 @@
-import * as bull from 'bull';
+import bull from 'bull';
 import { Job, JobStatus } from '../interfaces/job.interface';
 import { createQueueAdapter } from './queue.adapter';
 

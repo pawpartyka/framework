@@ -1,4 +1,4 @@
-import * as redis from 'ioredis';
+import redis from 'ioredis';
 import { JobOptions } from './job-options.interface';
 
 export interface AdvancedSettings {

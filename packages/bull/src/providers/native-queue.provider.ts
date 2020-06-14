@@ -1,5 +1,5 @@
 import { Provider, Token } from '@artisanjs/core';
-import * as NativeQueue from 'bull';
+import NativeQueue from 'bull';
 import { QueueOptions } from '../interfaces/queue-options.interface';
 import { getQueueOptionsToken } from './queue-options.provider';
 

@@ -1,4 +1,4 @@
-import * as redis from 'ioredis';
+import redis from 'ioredis';
 import { EventEmitter } from './event-emitter.interface';
 import { CronRepeatOptions, EveryRepeatOptions, JobOptions } from './job-options.interface';
 import { Job } from './job.interface';
