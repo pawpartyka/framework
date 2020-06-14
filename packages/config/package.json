@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "dotenv-expand": "^5.1.0",
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {

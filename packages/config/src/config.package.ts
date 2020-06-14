@@ -1,5 +1,5 @@
 import { Package, Provider } from '@artisanjs/core';
-import { ConfigService } from './services/config.service';
+import { Config } from './services/config.service';
 
 export class ConfigPackage {
   public static configure(): ConfigPackage {
@@ -10,7 +10,7 @@ export class ConfigPackage {
 
   protected constructor() {
     this.providers = [
-      ConfigService,
+      Config,
     ];
   }
 
