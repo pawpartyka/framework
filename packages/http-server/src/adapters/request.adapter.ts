@@ -1,7 +1,7 @@
 import { HttpMethod } from '@artisanjs/common';
-import * as accepts from 'accepts';
+import accepts from 'accepts';
 import * as http from 'http';
-import * as typeis from 'type-is';
+import typeis from 'type-is';
 import { parseBody } from '../helpers/parse-body.helper';
 import { parseCookies } from '../helpers/parse-cookies.helper';
 import { parseQuery } from '../helpers/parse-query.helper';

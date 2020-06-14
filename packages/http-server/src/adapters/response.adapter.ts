@@ -1,4 +1,4 @@
-import * as cookies from 'cookies';
+import cookies from 'cookies';
 import * as http from 'http';
 import { GetCookieOptions, HasCookieOptions, Response, SetCookieOptions } from '../interfaces/response.interface';
 

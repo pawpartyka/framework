@@ -1,7 +1,7 @@
-import * as coBody from 'co-body';
+import coBody from 'co-body';
 import * as formidable from 'formidable';
 import * as http from 'http';
-import * as typeis from 'type-is';
+import typeis from 'type-is';
 import { File } from '../interfaces/file.interface';
 
 function mapFile(file: formidable.File): File {

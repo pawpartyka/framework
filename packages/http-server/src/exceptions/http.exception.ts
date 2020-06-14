@@ -1,5 +1,5 @@
 import { HttpStatus } from '@artisanjs/common';
-import * as statuses from 'statuses';
+import statuses from 'statuses';
 
 export class HttpException extends Error {
   public readonly reason: object | string;
