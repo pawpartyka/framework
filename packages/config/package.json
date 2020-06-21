@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/config",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
@@ -27,7 +27,7 @@
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {
-    "@artisanjs/core": "^0.0.6",
+    "@artisanjs/core": "^0.0.7",
     "@types/jest": "^24.9.0",
     "@types/lodash.get": "^4.4.6",
     "@types/node": "^13.1.6",

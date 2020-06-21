@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",

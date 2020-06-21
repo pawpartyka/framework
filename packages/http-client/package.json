@@ -1,6 +1,6 @@
 {
   "name": "@artisanjs/http-client",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://artisanjs.io",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
@@ -26,8 +26,8 @@
     "axios": "^0.19.2"
   },
   "devDependencies": {
-    "@artisanjs/common": "^0.0.6",
-    "@artisanjs/core": "^0.0.6",
+    "@artisanjs/common": "^0.0.7",
+    "@artisanjs/core": "^0.0.7",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "jest": "^24.9.0",
