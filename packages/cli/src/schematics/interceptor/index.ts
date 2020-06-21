@@ -1,24 +1,17 @@
 import { normalize, strings } from '@angular-devkit/core';
-import { apply, applyTemplates, mergeWith, move, url, MergeStrategy, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
-import { join } from 'path';
+import { apply, applyTemplates, filter, mergeWith, move, noop, url, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { join, parse } from 'path';
 import { ServiceSchema } from './schema';
 
 export function interceptor(options: ServiceSchema): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    console.log(options);
+    const name: string = parse(options.name).name;
+    const path = normalize(join(options.path, options.flat ? '' : strings.dasherize(options.name)));
 
-    const movePath = normalize(join(options.path, strings.dasherize(options.name)));
-
-    console.log(movePath);
-
-    const templateSource = apply(url('./files'), [
-      applyTemplates({
-        ...strings,
-        ...options,
-      }),
-      move(movePath),
-    ]);
-
-    return mergeWith(templateSource, MergeStrategy.Default);
+    return mergeWith(apply(url('./files'), [
+      options.skipTests ? filter(it => !it.endsWith('.spec.ts.template')) : noop(),
+      applyTemplates({ ...strings, name: name }),
+      move(path),
+    ]));
   };
 }

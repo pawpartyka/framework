@@ -1,8 +1,24 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
   "properties": {
+    "flat": {
+      "type": "boolean",
+      "default": false
+    },
     "name": {
       "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "skipTests": {
+      "type": "boolean",
+      "default": false
     }
-  }
+  },
+  "required": [
+    "name",
+    "path"
+  ]
 }

@@ -7,10 +7,9 @@
 !/test/**
 !/.gitignore
 !/.npmignore
-!/artisan-schema.json
+!/collection.json
 !/package.json
 !/package-lock.json
 !/README.md
-!/schematics.json
 !/tsconfig.json
 !/tslint.json

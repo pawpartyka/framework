@@ -1,5 +1,6 @@
 export interface ServiceSchema {
+  flat: boolean;
   name: string;
-  path?: string;
-  flat?: boolean;
+  path: string;
+  skipTests: boolean;
 }

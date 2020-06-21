@@ -4,8 +4,7 @@
 
 # include whitelist
 !/dist/**
-!/artisan-schema.json
+!/collection.json
 !/LICENSE
 !/package.json
 !/README.md
-!/schematics.json

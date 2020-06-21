@@ -27,20 +27,18 @@
     "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand"
   },
   "dependencies": {
-    "@angular-devkit/core": "^9.1.7",
-    "@angular-devkit/schematics": "^9.1.7",
-    "@angular-devkit/schematics-cli": "^0.901.7",
-    "commander": "^5.1.0",
-    "dotenv": "^8.2.0",
+    "@angular-devkit/core": "^9.1.9",
+    "@angular-devkit/schematics": "^9.1.9",
+    "@angular-devkit/schematics-cli": "^0.901.9",
     "inquirer": "^7.1.0",
-    "ora": "^4.0.4",
-    "webpack": "^4.43.0"
+    "inquirer-fuzzy-path": "^2.3.0",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
-    "@types/webpack": "^4.41.17",
+    "@types/yargs": "^15.0.5",
     "cpx": "^1.5.0",
     "husky": "^4.0.10",
     "jest": "^24.9.0",
@@ -70,5 +68,5 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "schematics": "./schematics.json"
+  "schematics": "./collection.json"
 }
