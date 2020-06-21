@@ -1,6 +1,6 @@
 import { Application } from '@artisanjs/core';
 import { Test } from '@artisanjs/testing';
-import { AppService } from '../../src/services/app.service.ts.template';
+import { AppService } from '../src/services/app.service';
 
 describe('AppService', () => {
   let appService: AppService;

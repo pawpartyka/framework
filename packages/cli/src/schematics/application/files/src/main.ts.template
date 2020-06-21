@@ -1,14 +1,20 @@
+import { ConfigPackage } from '@artisanjs/config';
 import { Application, ArtisanFactory } from '@artisanjs/core';
-import { AppService } from './services/app.service.ts.template';
+import { AppService } from './services/app.service';
 
 (async (): Promise<void> => {
-  const app: Application = await ArtisanFactory
+  const application: Application = await ArtisanFactory
     .configureApplication({
+      packages: [
+        ConfigPackage
+          .configure()
+          .register(),
+      ],
       providers: [
         AppService,
       ],
     })
     .compile();
 
-  await app.listen();
+  await application.listen();
 })();

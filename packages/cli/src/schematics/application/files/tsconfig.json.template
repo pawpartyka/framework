@@ -5,20 +5,21 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
-    "incremental": true,
-    "lib": [
-      "es2019"
-    ]
+    "baseUrl": "./",
+    "incremental": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ],
   "exclude": [
+    "dist",
+    "e2e",
     "node_modules",
+    "**/*.e2e-spec.ts",
     "**/*.spec.ts"
   ]
 }

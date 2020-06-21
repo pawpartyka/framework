@@ -3,11 +3,14 @@
 !*/
 
 # include whitelist
+!/e2e/**
 !/src/**
-!/test/**
-!/.editorconfig.template
+!/.editorconfig
+!/.env.example
 !/.gitignore
-!/package.json.template
+!/jest.config.json
+!/jest-e2e.config.json
+!/package.json
 !/package-lock.json
 !/README.md
 !/tsconfig.json
