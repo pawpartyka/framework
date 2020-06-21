@@ -1,7 +1,7 @@
 {
   "name": "<%= name %>",
   "version": "0.0.0",
-  "description": "TypeScript starter",
+  "description": "",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
