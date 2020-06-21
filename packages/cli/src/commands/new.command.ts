@@ -12,7 +12,7 @@ export const NewCommand: CommandModule = {
   command: [
     'new',
   ],
-  describe: 'Create a new project',
+  describe: 'Generate a new project',
   handler: async yargs => {
     const answers = await inquirer.prompt([
       {
