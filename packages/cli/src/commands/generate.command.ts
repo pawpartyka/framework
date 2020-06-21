@@ -29,14 +29,12 @@ export const GenerateCommand: CommandModule = {
         type: 'input',
         name: 'name',
         message: 'Name:',
-        validate: value => typeof value === 'string' || 'Pass a valid name',
       },
       {
-        type: 'fuzzypath',
+        type: 'input',
         name: 'path',
         message: 'Path:',
-        itemType: 'directory',
-        rootPath: 'src',
+        default: 'src',
       },
       {
         name: 'flat',

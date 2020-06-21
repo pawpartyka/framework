@@ -31,7 +31,6 @@
     "@angular-devkit/schematics": "^9.1.9",
     "@angular-devkit/schematics-cli": "^0.901.9",
     "inquirer": "^7.1.0",
-    "inquirer-fuzzy-path": "^2.3.0",
     "yargs": "^15.3.1"
   },
   "devDependencies": {
