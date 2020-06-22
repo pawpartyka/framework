@@ -1,4 +1,4 @@
-import * as clc from 'cli-color';
+import clc from 'cli-color';
 import { Injectable } from '../decorators/injectable.decorator';
 import { Optional } from '../decorators/optional.decorator';
 
