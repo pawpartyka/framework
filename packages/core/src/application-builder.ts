@@ -25,10 +25,6 @@ export class ApplicationBuilder {
     ];
   }
 
-  public useLogger(logger: Logger): this {
-    return this.overrideProvider(Logger).useValue(logger);
-  }
-
   public async compile(): Promise<Application> {
     return await Application.create({
       providers: this.providers,

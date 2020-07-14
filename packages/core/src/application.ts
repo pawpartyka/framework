@@ -32,7 +32,7 @@ export class Application {
   public static async create(options: ApplicationOptions): Promise<Application> {
     const application: Application = await new Application(options.providers).init();
 
-    (await application.find(Logger)).log('Starting application...');
+    (await application.find(Logger)).info('Starting application...');
 
     await application.registerShutdownHooks([]);
     await application.callOnApplicationBootHooks();
