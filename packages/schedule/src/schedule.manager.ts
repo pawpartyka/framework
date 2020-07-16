@@ -25,13 +25,13 @@ export class ScheduleManager implements OnApplicationBoot, OnApplicationListen, 
   }
 
   public async onApplicationListen(): Promise<void> {
-    this.logger.log('Starting schedule...');
+    this.logger.info('Starting schedule...');
 
     this.jobs.forEach(it => it.start());
   }
 
   public async onApplicationShutdown(): Promise<void> {
-    this.logger.log(`Stopping schedule...`);
+    this.logger.info(`Stopping schedule...`);
 
     this.jobs.forEach(it => it.stop());
   }

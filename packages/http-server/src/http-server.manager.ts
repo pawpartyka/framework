@@ -45,13 +45,13 @@ export class HttpServerManager implements OnApplicationBoot, OnApplicationListen
 
   public async onApplicationListen(): Promise<void> {
     this.httpServer.listen(8080, () => {
-      this.logger.log(`Http server listening at port 8080`);
+      this.logger.info(`Http server listening at port 8080`);
     });
   }
 
   public async onApplicationShutdown(signal: string): Promise<void> {
     this.httpServer.close(() => {
-      this.logger.log('Http server has been stopped');
+      this.logger.info('Http server has been stopped');
     });
   }
 }
