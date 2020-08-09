@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector, Logger, OnApplicationBoot } from '@artisanjs/core';
+import { Injectable, Injector, Logger, OnApplicationBoot } from '@artisanjs/core';
 import matcher from 'matcher';
 import { getOnEventMetadata, hasOnEventMetadata } from './decorators/on-event.decorator';
 

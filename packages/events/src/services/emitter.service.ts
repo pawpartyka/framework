@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@artisanjs/core';
+import { Injectable } from '@artisanjs/core';
 import { EventsManager } from '../events.manager';
 
 @Injectable()
