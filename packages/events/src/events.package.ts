@@ -1,4 +1,5 @@
 import { Package, Provider } from '@artisanjs/core';
+import { EventsManager } from './events.manager';
 import { Emitter } from './services/emitter.service';
 
 export class EventsPackage {
@@ -11,6 +12,7 @@ export class EventsPackage {
   protected constructor() {
     this.providers = [
       Emitter,
+      EventsManager,
     ];
   }
 
