@@ -1,14 +1,18 @@
 import { Injectable } from '@artisanjs/core';
-import { EventsManager } from '../events.manager';
+import matcher from 'matcher';
+import { Registry } from './registry.service';
 
 @Injectable()
 export class Emitter {
   constructor(
-    private readonly eventsManager: EventsManager,
+    private readonly registry: Registry,
   ) {
   }
 
   public emit(event: string, data: any): void {
-    this.eventsManager.emit(event, data);
+    this
+      .registry
+      .filter(it => matcher.isMatch(event, it.event))
+      .forEach(it => it.handler(data));
   }
 }
