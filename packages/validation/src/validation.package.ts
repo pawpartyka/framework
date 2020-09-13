@@ -1,6 +1,10 @@
 import { Package, Provider } from '@artisanjs/core';
 import { Validator } from './services/validator.service';
 
+const BUILT_IN_SERVICES: Provider[] = [
+  Validator,
+];
+
 export class ValidationPackage {
   public static configure(): ValidationPackage {
     return new ValidationPackage();
@@ -10,7 +14,7 @@ export class ValidationPackage {
 
   protected constructor() {
     this.providers = [
-      Validator,
+      ...BUILT_IN_SERVICES,
     ];
   }
 
