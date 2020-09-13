@@ -1,11 +1,8 @@
 import { HttpStatus } from '@artisanjs/common';
-import { RequestOptions } from './request-options.interface';
 
-export interface Response<T = any> {
-  data: T;
+export interface Response<R = any> {
+  body: R;
+  headers: { [header: string]: string; };
   status: HttpStatus;
   statusText: string;
-  headers: any;
-  options: RequestOptions;
-  request?: any;
 }

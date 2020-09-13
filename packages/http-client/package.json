@@ -23,11 +23,12 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "centra": "^2.4.2"
   },
   "devDependencies": {
     "@artisanjs/common": "^0.0.7",
     "@artisanjs/core": "^0.0.7",
+    "@types/centra": "^2.2.0",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "jest": "^24.9.0",

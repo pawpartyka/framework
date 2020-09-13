@@ -1,5 +1,14 @@
 import { Package, Provider } from '@artisanjs/core';
+import { createDefaultRequestOptionsProvider } from './providers/default-request-options.provider';
 import { HttpClient } from './services/http-client.service';
+
+const BUILT_IN_PROVIDERS: Provider[] = [
+  createDefaultRequestOptionsProvider(),
+];
+
+const BUILT_IN_SERVICES: Provider[] = [
+  HttpClient,
+];
 
 export class HttpClientPackage {
   public static configure(): HttpClientPackage {
@@ -10,7 +19,8 @@ export class HttpClientPackage {
 
   protected constructor() {
     this.providers = [
-      HttpClient,
+      ...BUILT_IN_PROVIDERS,
+      ...BUILT_IN_SERVICES,
     ];
   }
 
