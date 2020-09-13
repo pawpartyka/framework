@@ -7,7 +7,7 @@ import { Type } from './interfaces/type.interface';
 import { Injector } from './services/injector.service';
 import { Logger } from './services/logger.service';
 
-const BUILT_IN_PROVIDERS: Provider[] = [
+const BUILT_IN_SERVICES: Provider[] = [
   Injector,
   Logger,
 ];
@@ -17,7 +17,7 @@ export class ApplicationBuilder {
 
   constructor(options: ApplicationBuilderOptions) {
     const packages: Package[] = [...options.packages || []];
-    const providers: Provider[] = [...BUILT_IN_PROVIDERS, ...options.providers || []];
+    const providers: Provider[] = [...BUILT_IN_SERVICES, ...options.providers || []];
 
     this.providers = [
       ...packages.map(it => it.providers || []).flat(),
