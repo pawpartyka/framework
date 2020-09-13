@@ -5,6 +5,10 @@ import { createNativeQueueProvider } from './providers/native-queue.provider';
 import { createQueueOptionsProvider, QueueOptionsProvider } from './providers/queue-options.provider';
 import { createQueueProvider } from './providers/queue.provider';
 
+const BUILT_IN_MANAGERS: Provider[] = [
+  BullManager,
+];
+
 export class BullPackage {
   public static configure(): BullPackage {
     return new BullPackage();
@@ -14,7 +18,7 @@ export class BullPackage {
 
   protected constructor() {
     this.providers = [
-      BullManager,
+      ...BUILT_IN_MANAGERS,
     ];
   }
 
