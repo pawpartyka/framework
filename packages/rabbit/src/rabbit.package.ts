@@ -19,6 +19,10 @@ import { createQueueOptionsProvider, QueueOptionsProvider } from './providers/qu
 import { createQueueProvider } from './providers/queue.provider';
 import { RabbitManager } from './rabbit.manager';
 
+const BUILT_IN_MANAGERS: Provider[] = [
+  RabbitManager,
+];
+
 export class RabbitPackage {
   public static configure(): InitialConfigurator<RabbitPackage> {
     const instance = new RabbitPackage();
@@ -35,7 +39,7 @@ export class RabbitPackage {
 
   protected constructor() {
     this.providers = [
-      RabbitManager,
+      ...BUILT_IN_MANAGERS,
     ];
   }
 
