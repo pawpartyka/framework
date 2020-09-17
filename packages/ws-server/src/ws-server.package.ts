@@ -4,6 +4,14 @@ import { createWsServerPackageOptionsProvider, WsServerPackageOptionsProvider } 
 import { Emitter } from './services/emitter.service';
 import { WsServerManager } from './ws-server.manager';
 
+const BUILT_IN_MANAGERS: Provider[] = [
+  WsServerManager,
+];
+
+const BUILT_IN_SERVICES: Provider[] = [
+  Emitter,
+];
+
 export class WsServerPackage {
   public static configure(options: WsServerPackageOptions | WsServerPackageOptionsProvider = {}): WsServerPackage {
     return new WsServerPackage(options);
@@ -12,7 +20,10 @@ export class WsServerPackage {
   private readonly providers: Provider[];
 
   protected constructor(options: WsServerPackageOptions | WsServerPackageOptionsProvider = {}) {
-    this.providers = [Emitter, WsServerManager];
+    this.providers = [
+      ...BUILT_IN_MANAGERS,
+      ...BUILT_IN_SERVICES,
+    ];
 
     if (isClassProvider(options) || isExistingProvider(options) || isFactoryProvider(options)) {
       this.providers.push(createWsServerPackageOptionsProvider(options));
