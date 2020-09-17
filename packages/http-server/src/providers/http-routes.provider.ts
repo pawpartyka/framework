@@ -4,11 +4,12 @@ import * as mime from 'mime-types';
 import { getControllerMetadata, hasControllerMetadata, ControllerMetadata } from '../decorators/controller.decorator';
 import { getRequestMappingMetadata } from '../decorators/request-mapping.decorator';
 import { getRequestParamMetadata, Factory } from '../decorators/request-param.decorator';
+import { HttpServerPackageOptions } from '../interfaces/http-server-package-options.interface';
 import { Interceptor } from '../interfaces/interceptor.interface';
 import { Next } from '../interfaces/next.interface';
 import { Request } from '../interfaces/request.interface';
 import { Response } from '../interfaces/response.interface';
-import { HTTP_INTERCEPTOR } from '../tokens/http-interceptor.token';
+import { HTTP_SERVER_PACKAGE_OPTIONS } from './http-server-package-options.provider';
 
 export const HTTP_ROUTES: Token = Symbol('http-routes');
 
@@ -35,8 +36,8 @@ export function composeHttpRouteHandler(interceptors: ((req: Request, res: Respo
 export function createHttpRoutesProvider(): Provider {
   return {
     provide: HTTP_ROUTES,
-    useFactory: async (injector: Injector): Promise<HttpRoute[]> => {
-      const httpInterceptors: Interceptor[] = await injector.find(HTTP_INTERCEPTOR, []);
+    useFactory: async (httpServerPackageOptions: HttpServerPackageOptions, injector: Injector): Promise<HttpRoute[]> => {
+      const httpInterceptors: Interceptor[] = await Promise.all((httpServerPackageOptions.interceptors || []).map(it => injector.find(it)));
       const httpRoutes: HttpRoute[] = [];
 
       for (const controller of await injector.filter(it => hasControllerMetadata(it))) {
@@ -97,7 +98,7 @@ export function createHttpRoutesProvider(): Provider {
 
       return httpRoutes;
     },
-    inject: [Injector],
+    inject: [HTTP_SERVER_PACKAGE_OPTIONS, Injector],
   };
 }
 

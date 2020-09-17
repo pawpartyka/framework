@@ -6,10 +6,12 @@ import { serializeError } from 'serialize-error';
 import { createRequestAdapter } from './adapters/request.adapter';
 import { createResponseAdapter } from './adapters/response.adapter';
 import { HttpException } from './exceptions/http.exception';
+import { HttpServerPackageOptions } from './interfaces/http-server-package-options.interface';
 import { Request } from './interfaces/request.interface';
 import { Response } from './interfaces/response.interface';
 import { HTTP_ROUTER } from './providers/http-router.provider';
 import { HttpRoute, HTTP_ROUTES } from './providers/http-routes.provider';
+import { HTTP_SERVER_PACKAGE_OPTIONS } from './providers/http-server-package-options.provider';
 import { HTTP_SERVER } from './providers/http-server.provider';
 
 @Injectable()
@@ -18,6 +20,7 @@ export class HttpServerManager implements OnApplicationBoot, OnApplicationListen
     @Inject(HTTP_ROUTER) private readonly httpRouter: HttpRouter<any>,
     @Inject(HTTP_ROUTES) private readonly httpRoutes: HttpRoute[],
     @Inject(HTTP_SERVER) private readonly httpServer: http.Server,
+    @Inject(HTTP_SERVER_PACKAGE_OPTIONS) private readonly httpServerPackageOptions: HttpServerPackageOptions,
     private readonly logger: Logger,
   ) {
   }
@@ -44,8 +47,10 @@ export class HttpServerManager implements OnApplicationBoot, OnApplicationListen
   }
 
   public async onApplicationListen(): Promise<void> {
-    this.httpServer.listen(8080, () => {
-      this.logger.info(`Http server listening at port 8080`);
+    const port: number = this.httpServerPackageOptions.port || 8080;
+
+    this.httpServer.listen(port, () => {
+      this.logger.info(`Http server listening at port ${ port }`);
     });
   }
 

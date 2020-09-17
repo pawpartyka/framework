@@ -1,35 +1,38 @@
-import { Package, Provider, Type } from '@artisanjs/core';
-import * as http from 'http';
-import * as tls from 'tls';
+import { isClassProvider, isExistingProvider, isFactoryProvider, Package, Provider } from '@artisanjs/core';
 import { HttpServerManager } from './http-server.manager';
-import { Interceptor } from './interfaces/interceptor.interface';
+import { HttpServerPackageOptions } from './interfaces/http-server-package-options.interface';
 import { createHttpRouterProvider } from './providers/http-router.provider';
 import { createHttpRoutesProvider } from './providers/http-routes.provider';
+import { createHttpServerPackageOptionsProvider, HttpServerPackageOptionsProvider } from './providers/http-server-package-options.provider';
 import { createHttpServerProvider } from './providers/http-server.provider';
-import { HTTP_INTERCEPTOR } from './tokens/http-interceptor.token';
+
+const BUILT_IN_MANAGERS: Provider[] = [
+  HttpServerManager,
+];
+
+const BUILT_IN_PROVIDERS: Provider[] = [
+  createHttpRouterProvider(),
+  createHttpRoutesProvider(),
+  createHttpServerProvider(),
+];
 
 export class HttpServerPackage {
-  public static configure(options: HttpServerPackageOptions = {}): HttpServerPackage {
+  public static configure(options: HttpServerPackageOptions | HttpServerPackageOptionsProvider = {}): HttpServerPackage {
     return new HttpServerPackage(options);
   }
 
   private readonly providers: Provider[];
 
-  protected constructor(options: HttpServerPackageOptions = {}) {
+  protected constructor(options: HttpServerPackageOptions | HttpServerPackageOptionsProvider = {}) {
     this.providers = [
-      HttpServerManager,
-
-      createHttpRouterProvider(),
-      createHttpRoutesProvider(),
-      createHttpServerProvider(),
+      ...BUILT_IN_MANAGERS,
+      ...BUILT_IN_PROVIDERS,
     ];
 
-    for (const interceptor of options?.interceptors || []) {
-      this.providers.push({
-        provide: HTTP_INTERCEPTOR,
-        useClass: interceptor,
-        multi: true,
-      });
+    if (isClassProvider(options) || isExistingProvider(options) || isFactoryProvider(options)) {
+      this.providers.push(createHttpServerPackageOptionsProvider(options));
+    } else {
+      this.providers.push(createHttpServerPackageOptionsProvider({ useFactory: () => options as HttpServerPackageOptions }));
     }
   }
 
@@ -38,8 +41,4 @@ export class HttpServerPackage {
       providers: this.providers,
     };
   }
-}
-
-export interface HttpServerPackageOptions extends tls.SecureContextOptions, tls.TlsOptions, http.ServerOptions {
-  interceptors?: Type<Interceptor>[];
 }
