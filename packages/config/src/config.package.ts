@@ -1,6 +1,10 @@
 import { Package, Provider } from '@artisanjs/core';
 import { Config } from './services/config.service';
 
+const BUILT_IN_SERVICES: Provider[] = [
+  Config,
+];
+
 export class ConfigPackage {
   public static configure(): ConfigPackage {
     return new ConfigPackage();
@@ -10,7 +14,7 @@ export class ConfigPackage {
 
   protected constructor() {
     this.providers = [
-      Config,
+      ...BUILT_IN_SERVICES,
     ];
   }
 
