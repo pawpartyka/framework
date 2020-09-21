@@ -51,7 +51,7 @@ export async function makeRequest(options: RequestOptions): Promise<Response<any
   return {
     body: body,
     headers: result.headers as any,
-    status: result.statusCode,
-    statusText: '', // todo@
+    status: result.coreRes?.statusCode,
+    statusText: result.coreRes?.statusMessage,
   };
 }
