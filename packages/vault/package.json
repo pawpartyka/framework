@@ -24,7 +24,9 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@artisanjs/common": "^0.0.7",
     "@artisanjs/core": "^0.0.7",
+    "@artisanjs/http-client": "^0.0.7",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "jest": "^24.9.0",
@@ -36,7 +38,9 @@
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
-    "@artisanjs/core": "^0.0.1",
+    "@artisanjs/common": "^0.0.7",
+    "@artisanjs/core": "^0.0.7",
+    "@artisanjs/http-client": "^0.0.7",
     "reflect-metadata": "^0.1.13"
   },
   "jest": {
