@@ -1,6 +1,7 @@
 import { HttpMethod } from '@artisanjs/common';
 import { Provider, Token } from '@artisanjs/core';
 import { HttpClient } from '@artisanjs/http-client';
+import { RequestOptions } from '@artisanjs/http-client';
 import { VaultOptions } from '../interfaces/vault-options.interface';
 import { Vault } from '../interfaces/vault.interface';
 import { getVaultOptionsToken } from './vault-options.provider';
@@ -59,6 +60,17 @@ export function createVaultProvider(vaultName: string): Provider {
             method: HttpMethod.GET,
             responseType: 'json',
             url: 'http://0.0.0.0:8200/v1/' + path,
+          });
+        },
+        request: async (options: Omit<RequestOptions, 'responseType'>): Promise<any> => {
+          return await httpClient.request({
+            ...options,
+            headers: {
+              ...headers,
+              ...options.headers || {},
+            },
+            responseType: 'json',
+            url: 'http://0.0.0.0:8200/v1/' + options.url,
           });
         },
         write: async (path: string, data: any): Promise<any> => {

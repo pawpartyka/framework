@@ -1,3 +1,5 @@
+import { RequestOptions } from '@artisanjs/http-client';
+
 export interface Vault {
   token: string;
   url: string;
@@ -6,5 +8,6 @@ export interface Vault {
   help(path: string): Promise<any>;
   list(path: string): Promise<any>;
   read(path: string): Promise<any>;
+  request(options: Omit<RequestOptions, 'responseType'>): Promise<any>;
   write(path: string, data: any): Promise<any>;
 }
