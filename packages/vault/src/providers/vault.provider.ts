@@ -1,7 +1,6 @@
 import { HttpMethod } from '@artisanjs/common';
 import { Provider, Token } from '@artisanjs/core';
-import { HttpClient } from '@artisanjs/http-client';
-import { RequestOptions } from '@artisanjs/http-client';
+import { HttpClient, RequestOptions } from '@artisanjs/http-client';
 import { VaultOptions } from '../interfaces/vault-options.interface';
 import { Vault } from '../interfaces/vault.interface';
 import { getVaultOptionsToken } from './vault-options.provider';
