@@ -5,6 +5,9 @@
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
   "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
