@@ -15,15 +15,15 @@
     "url": "git+https://github.com/artisanjs/artisan.git"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc -p tsconfig.json",
-    "start": "ts-node src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
+    "prebuild": "rimraf dist",
+    "start": "ts-node src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand"
+    "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "validator": "^13.0.0"
@@ -34,7 +34,6 @@
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "@types/validator": "^13.0.0",
-    "husky": "^4.0.10",
     "jest": "^24.9.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
@@ -47,23 +46,18 @@
     "@artisanjs/core": "^0.0.5",
     "reflect-metadata": "^0.1.13"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  },
   "jest": {
+    "coverageDirectory": "../coverage",
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "test",
+    "rootDir": "./src",
+    "testEnvironment": "node",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    }
   }
 }

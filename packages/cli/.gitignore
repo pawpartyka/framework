@@ -4,12 +4,12 @@
 
 # include whitelist
 !/src/**
-!/test/**
 !/.gitignore
 !/.npmignore
 !/collection.json
 !/package.json
 !/package-lock.json
 !/README.md
+!/tsconfig.build.json
 !/tsconfig.json
 !/tslint.json

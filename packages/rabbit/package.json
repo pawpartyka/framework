@@ -15,7 +15,7 @@
     "url": "git+https://github.com/artisanjs/artisan.git"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
     "prebuild": "rimraf dist",
@@ -33,7 +33,6 @@
     "@types/amqplib": "^0.5.13",
     "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
-    "husky": "^4.0.10",
     "jest": "^24.9.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
@@ -47,17 +46,17 @@
     "reflect-metadata": "^0.1.13"
   },
   "jest": {
+    "coverageDirectory": "../coverage",
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "test",
+    "rootDir": "./src",
+    "testEnvironment": "node",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    }
   }
 }
