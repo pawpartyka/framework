@@ -20,8 +20,8 @@
     "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
     "prebuild": "rimraf dist",
     "start": "ts-node src/index.ts",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage --passWithNoTests",
     "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand",
     "test:watch": "jest --watch"
   },
