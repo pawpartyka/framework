@@ -9,7 +9,6 @@ name: "\U0001F41E Bug report"
 
 ### Current behavior
 **Description**
-<pre><code>
 <!-- ✍️ A clear and concise description of the problem... -->
 
 <!-- Can you pin-point one or more @artisanjs/* packages as the source of the bug? -->
@@ -17,12 +16,9 @@ name: "\U0001F41E Bug report"
 
 <!-- Did this behavior use to work in the previous version? -->
 <!-- ✍️ --> The previous version in which this bug was not present was: ....
-</code></pre>
 
 **Reproduction**
-<pre><code>
 <!-- ✍️ Please create and share minimal reproduction of the issue using REPL or GitHub repository -->
-</code></pre>
 
 **Environment**
 <pre><code>
@@ -31,18 +27,12 @@ name: "\U0001F41E Bug report"
 </code></pre>
 
 **Anything else relevant?**
-<pre><code>
 <!-- ✍️ Any other important information... -->
-</code></pre>
 
 ### Expected behavior
 **Description**
-<pre><code>
 <!-- ✍️ If you have an expected behavior, please describe it. -->
-</code></pre>
 
 ### Possible solution
 **Description**
-<pre><code>
 <!-- ✍️ If you have a possible solution, please describe it. -->
-</code></pre>
