@@ -7,6 +7,7 @@
 !/packages/**
 !/.editorconfig
 !/.gitignore
+!/CONTRIBUTING.md
 !/lerna.json
 !/LICENSE
 !/package.json
