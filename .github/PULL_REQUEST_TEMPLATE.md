@@ -1,4 +1,4 @@
-## 🌷 Pull request
+## 🌷  Pull request
 <!-- 📖  https://github.com/artisanjs/artisan/blob/master/CONTRIBUTING.md -->
 
 **What kind of change does this pull request introduce?** (check at least one)
