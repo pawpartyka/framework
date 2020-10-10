@@ -1,7 +1,7 @@
 ---
 about: "Questions and requests for support"
 labels: "help wanted"
-name: "❓  Support request"
+name: "❓ Support request"
 ---
 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑
 
