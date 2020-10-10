@@ -4,8 +4,7 @@ labels: "bug"
 name: "\U0001F41E Bug report"
 ---
 ## 🐞 Bug report
-<!-- 📖 Issues that don't have enough info and can't be reproduced will be closed. -->
-<!-- 📖 You can read more about issue submission guidelines here: https://github.com/artisanjs/artisan/blob/master/CONTRIBUTING.md#-submitting-an-issue -->
+<!-- 📖 https://github.com/artisanjs/artisan/blob/master/CONTRIBUTING.md -->
 
 ### Current behavior
 **Description**
