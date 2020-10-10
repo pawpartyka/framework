@@ -15,7 +15,7 @@
 - [ ] Yes
 - [ ] No
 
-<!-- ✍️  If this pull request contains a breaking change, please describe the impact and migration path for existing applications. -->
+<!-- ✍️  If this pull request contains a breaking change, please describe the impact and migration path. -->
 
 **What is the current behavior?**
 <!-- ✍️  Please describe the current behavior that you are modifying, or link to a relevant issue. -->
