@@ -7,6 +7,7 @@
 !/packages/**
 !/.editorconfig
 !/.gitignore
+!/CODE_OF_CONDUCT.md
 !/CONTRIBUTING.md
 !/lerna.json
 !/LICENSE
