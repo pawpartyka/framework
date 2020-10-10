@@ -14,10 +14,10 @@ name: "\U0001F41E Bug report"
 <!-- ✍️  --> The issue is caused by package @artisanjs/...
 
 <!-- Did this behavior use to work in the previous version? -->
-<!-- ✍️  --> The previous version in which this bug was not present was: ....
+<!-- ✍️  --> The previous version in which this bug was not present was: ...
 
 **Reproduction**
-<!-- ✍️  Please create and share minimal reproduction of the issue using REPL or GitHub repository -->
+<!-- ✍️  Please create and share reproduction of the issue using REPL or GitHub repository -->
 
 **Environment**
 <pre><code>
