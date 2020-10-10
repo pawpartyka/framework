@@ -11,7 +11,7 @@
 
 <!-- ✍️ If other kind of change, please describe it. -->
 
-**Does this pull request introduce a breaking change?**
+**Does this pull request introduce a breaking change?** (check one)
 - [ ] Yes
 - [ ] No
 
