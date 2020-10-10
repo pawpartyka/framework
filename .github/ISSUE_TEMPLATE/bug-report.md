@@ -1,9 +1,9 @@
 ---
 about: "Report a bug in the Artisan Framework"
 labels: "bug"
-name: "\U0001F41E Bug report"
+name: "\U0001F41E  Bug report"
 ---
-## 🐞 Bug report
+## 🐞  Bug report
 <!-- 📖  https://github.com/artisanjs/artisan/blob/master/CONTRIBUTING.md -->
 
 ### Current behavior
