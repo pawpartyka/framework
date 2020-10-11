@@ -16,5 +16,5 @@ Project maintainers who do not follow the Code of Conduct may be removed from th
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting 
 one or more of the project maintainers.
 
-This Code of Conduct is adapted from the [Contributor Covenant](http:contributor-covenant.org), 
-version 1.0.0, available at https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html
+This Code of Conduct is adapted from the [Contributor Covenant](http://contributor-covenant.org), 
+version 1.0.0, available at [https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html](https://www.contributor-covenant.org/version/1/0/0/code-of-conduct.html)
