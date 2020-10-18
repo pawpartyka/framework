@@ -20,15 +20,9 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
     "postbuild": "cpx 'src/**/*.{template,json}' 'dist/'",
     "prebuild": "rimraf dist",
-    "start": "ts-node src/index.ts",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --passWithNoTests",
-    "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand",
-    "test:watch": "jest --watch"
+    "start": "ts-node src/index.ts"
   },
   "dependencies": {
     "@angular-devkit/core": "^9.1.9",
@@ -39,31 +33,13 @@
   },
   "devDependencies": {
     "@types/inquirer": "^6.5.0",
-    "@types/jest": "^24.9.0",
     "@types/node": "^13.1.6",
     "@types/yargs": "^15.0.5",
     "cpx": "^1.5.0",
-    "jest": "^24.9.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
-    "ts-jest": "^24.3.0",
     "ts-node": "^8.6.1",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.4"
-  },
-  "jest": {
-    "coverageDirectory": "../coverage",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "./src",
-    "testEnvironment": "node",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    }
   },
   "schematics": "./collection.json"
 }

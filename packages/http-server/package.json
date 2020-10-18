@@ -16,14 +16,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
     "prebuild": "rimraf dist",
-    "start": "ts-node src/index.ts",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --passWithNoTests",
-    "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand",
-    "test:watch": "jest --watch"
+    "start": "ts-node src/index.ts"
   },
   "dependencies": {
     "accepts": "^1.3.7",
@@ -46,37 +40,19 @@
     "@types/cookie": "^0.3.3",
     "@types/cookies": "^0.7.4",
     "@types/formidable": "^1.0.31",
-    "@types/jest": "^24.9.0",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^13.1.6",
     "@types/qs": "^6.9.1",
     "@types/statuses": "^1.5.0",
     "@types/type-is": "^1.6.3",
-    "jest": "^24.9.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
-    "ts-jest": "^24.3.0",
     "ts-node": "^8.6.1",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
     "@artisanjs/common": "^0.0.1",
     "@artisanjs/core": "^0.0.1",
     "reflect-metadata": "^0.1.13"
-  },
-  "jest": {
-    "coverageDirectory": "../coverage",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "./src",
-    "testEnvironment": "node",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    }
   }
 }
