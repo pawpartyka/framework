@@ -6,7 +6,7 @@ describe('Service', () => {
   let schematicTestRunner: SchematicTestRunner;
 
   beforeAll(() => {
-    schematicTestRunner = new SchematicTestRunner('schematics', join(process.cwd(), 'collection.json'));
+    schematicTestRunner = new SchematicTestRunner('schematics', join(process.cwd(), 'packages', 'cli', 'collection.json'));
   });
 
   describe('name option', () => {

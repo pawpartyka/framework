@@ -1,5 +1,4 @@
-// tslint:disable:max-line-length
-// tslint:disable:no-namespace
+/* eslint-disable @typescript-eslint/no-namespace */
 import { Readable } from 'stream';
 import { Url } from 'url';
 

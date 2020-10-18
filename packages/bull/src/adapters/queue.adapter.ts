@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 import bull from 'bull';
 import redis from 'ioredis';
 import { JobOptions } from '../interfaces/job-options.interface';

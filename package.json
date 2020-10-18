@@ -11,19 +11,43 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
-    "lint": "lerna run lint",
-    "lint:fix": "lerna run lint:fix",
-    "start": "lerna run start",
-    "test": "lerna run test",
-    "test:coverage": "lerna run test:coverage"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:debug": "node --inspect-brk -r ts-node/register jest --runInBand",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "husky": "^4.2.5",
-    "lerna": "^3.20.2"
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.4.1",
+    "eslint": "^7.11.0",
+    "husky": "^4.3.0",
+    "jest": "^26.5.3",
+    "lerna": "^3.20.2",
+    "ts-jest": "^26.4.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
+    }
+  },
+  "jest": {
+    "coverageDirectory": "coverage",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "roots": [
+      "packages"
+    ],
+    "testEnvironment": "node",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
     }
   }
 }

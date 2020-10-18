@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { Provider, Token } from '@artisanjs/core';
 import { RequestOptions } from '../interfaces/request-options.interface';
 

@@ -1,4 +1,3 @@
-// tslint:disable
 import 'reflect-metadata';
 import { ArtisanFactory } from '@artisanjs/core';
 import { getVaultToken } from './providers/vault.provider';
