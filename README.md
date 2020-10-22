@@ -1,10 +1,10 @@
-<a href="https://www.npmjs.com/org/artisanjs" target="_blank">
+<a href="https://npmjs.com/org/artisanjs" target="_blank">
 <img src="https://img.shields.io/npm/v/@artisanjs/core.svg" alt="NPM Version" />
 </a>
-<a href="https://www.npmjs.com/org/artisanjs" target="_blank">
+<a href="https://npmjs.com/org/artisanjs" target="_blank">
 <img src="https://img.shields.io/npm/dm/@artisanjs/core.svg" alt="NPM Downloads" />
 </a>
-<a href="https://www.npmjs.com/org/artisanjs" target="_blank">
+<a href="https://npmjs.com/org/artisanjs" target="_blank">
 <img src="https://img.shields.io/npm/l/@artisanjs/core.svg" alt="License" />
 </a>
 <a href="https://discord.gg/u993VxP" target="_blank">
