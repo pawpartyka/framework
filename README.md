@@ -10,10 +10,6 @@
 <a href="https://discord.gg/u993VxP" target="_blank">
 <img src="https://img.shields.io/discord/756274698202906797.svg?color=7389d8&label=Discord&logo=discord&logoColor=fff" alt="Discord" />
 </a>
-
-<a href="https://paypal.me/partyka95" target="_blank">
-<img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg?color=0079C1&label=Donate&logo=paypal&logoColor=fff" alt="PayPal" />
-</a>
 </p>
 
 ## Description
