@@ -25,6 +25,7 @@
     "husky": "^4.3.0",
     "jest": "^26.5.3",
     "lerna": "^3.20.2",
+    "reflect-metadata": "^0.1.13",
     "ts-jest": "^26.4.1",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
@@ -48,6 +49,9 @@
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
-    }
+    },
+    "setupFiles": [
+      "<rootDir>/node_modules/reflect-metadata/Reflect.js"
+    ]
   }
 }
