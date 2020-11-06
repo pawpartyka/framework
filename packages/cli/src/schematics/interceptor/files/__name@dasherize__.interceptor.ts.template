@@ -1,9 +1,0 @@
-import { Injectable } from '@artisanjs/core';
-import { Interceptor, Next, Request, Response } from '@artisanjs/http-server';
-
-@Injectable()
-export class <%= classify(name) %>Interceptor implements Interceptor {
-  public async intercept(request: Request, response: Response, next: Next): Promise<void> {
-    await next();
-  }
-}

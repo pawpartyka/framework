@@ -1,5 +1,0 @@
-import { Controller } from '@artisanjs/http-server';
-
-@Controller()
-export class <%= classify(name) %>Controller {
-}
