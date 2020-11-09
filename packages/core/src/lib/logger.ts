@@ -1,5 +1,5 @@
 import clc from 'cli-color';
-import { Injectable } from '../decorators/injectable.decorator';
+import { Injectable } from './metadata';
 
 function println(message: string, color: clc.Format): void {
   const datetime = new Date().toLocaleString(undefined, {

@@ -1,4 +1,5 @@
-import { Injectable, Logger } from '@artisanjs/core';
+import { Logger } from '../logger';
+import { Injectable } from '../metadata';
 
 @Injectable()
 export class TestingLogger extends Logger {

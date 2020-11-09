@@ -1,5 +1,7 @@
-import { ApplicationBuilder, Logger, OverrideBy, Package, Provider, Token } from '@artisanjs/core';
-import { TestingLogger } from '../services/testing-logger.service';
+import { TestingLogger } from './testing-logger';
+import { ApplicationBuilder, OverrideBy, Package } from '../application-builder';
+import { Logger } from '../logger';
+import { Provider, Token } from '../utils';
 
 export class TestingApplicationBuilder extends ApplicationBuilder {
   constructor(options: TestingApplicationBuilderOptions) {

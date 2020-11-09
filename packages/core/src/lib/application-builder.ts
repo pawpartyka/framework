@@ -1,27 +1,13 @@
 import { Application } from './application';
-import { isTypeProvider } from './helpers/is-type-provider.helper';
-import { Package } from './interfaces/package.interface';
-import { Provider } from './interfaces/provider.interface';
-import { Token } from './interfaces/token.interface';
-import { Type } from './interfaces/type.interface';
-import { Injector } from './services/injector.service';
-import { Logger } from './services/logger.service';
-
-const BUILT_IN_SERVICES: Provider[] = [
-  Injector,
-  Logger,
-];
+import { Dependency, isTypeProvider, Provider, Token, Type } from './utils';
 
 export class ApplicationBuilder {
   private readonly providers: Provider[];
 
   constructor(options: ApplicationBuilderOptions) {
-    const packages: Package[] = [...options.packages || []];
-    const providers: Provider[] = [...BUILT_IN_SERVICES, ...options.providers || []];
-
     this.providers = [
-      ...packages.map(it => it.providers || []).flat(),
-      ...providers,
+      ...(options.packages || []).map(it => it.providers || []).flat(),
+      ...options.providers || [],
     ];
   }
 
@@ -37,7 +23,7 @@ export class ApplicationBuilder {
         return this.override(token, { provide: token, useClass: type });
       },
       useFactory: (options: OverrideByFactoryOptions) => {
-        return this.override(token, { provide: token, useFactory: options.factory, inject: options.inject });
+        return this.override(token, { provide: token, useFactory: options.factory, dependencies: options.dependencies });
       },
       useValue: (value: any) => {
         return this.override(token, { provide: token, useValue: value });
@@ -69,5 +55,9 @@ export interface OverrideBy<T> {
 
 export interface OverrideByFactoryOptions {
   factory: (...args: any[]) => any;
-  inject?: Token[];
+  dependencies?: (Token | Dependency)[];
+}
+
+export interface Package {
+  providers?: Provider[];
 }
