@@ -1,7 +1,5 @@
-import { Logger } from '../logger';
-import { Injectable } from '../metadata';
+import { Logger } from './logger';
 
-@Injectable()
 export class TestingLogger extends Logger {
   public debug(message: string): void {
     return;

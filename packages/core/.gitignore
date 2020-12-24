@@ -4,6 +4,7 @@
 
 # include whitelist
 !/src/**
+!/test/**
 !/.gitignore
 !/.npmignore
 !/package.json

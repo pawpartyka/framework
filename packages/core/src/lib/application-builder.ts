@@ -1,63 +1,51 @@
+import { Provider } from './types/provider';
+import { Type } from './types/type';
+import { Logger } from './logger';
+import { LoggerFactory } from './logger-factory';
+import { Package } from './types/package';
 import { Application } from './application';
-import { Dependency, isTypeProvider, Provider, Token, Type } from './utils';
+import { Token } from './types/token';
+import { getProviderToken } from './utils/get-provider-token';
 
 export class ApplicationBuilder {
-  private readonly providers: Provider[];
+  protected readonly providers: Map<Token, Provider> = new Map();
+  protected readonly signals: Set<string> = new Set();
 
   constructor(options: ApplicationBuilderOptions) {
-    this.providers = [
-      ...(options.packages || []).map(it => it.providers || []).flat(),
-      ...options.providers || [],
-    ];
+    for (const pkg of options.packages || []) {
+      for (const provider of pkg.providers || []) {
+        this.providers.set(getProviderToken(provider), provider);
+      }
+    }
+
+    for (const provider of options.providers || []) {
+      this.providers.set(getProviderToken(provider), provider);
+    }
+  }
+
+  public enableShutdownHooks(signals: string[]): ApplicationBuilder {
+    for (const signal of signals) {
+      this.signals.add(signal);
+    }
+
+    return this;
+  }
+
+  public useLogger(loggerRef: Type<Logger>): ApplicationBuilder {
+    LoggerFactory.useLogger(loggerRef);
+
+    return this;
   }
 
   public async compile(): Promise<Application> {
     return await Application.create({
-      providers: this.providers,
+      providers: [...this.providers.values()],
+      signals: [...this.signals.values()],
     });
-  }
-
-  protected overrideProvider(token: Token): OverrideBy<this> {
-    return {
-      useClass: (type: Type) => {
-        return this.override(token, { provide: token, useClass: type });
-      },
-      useFactory: (options: OverrideByFactoryOptions) => {
-        return this.override(token, { provide: token, useFactory: options.factory, dependencies: options.dependencies });
-      },
-      useValue: (value: any) => {
-        return this.override(token, { provide: token, useValue: value });
-      },
-    };
-  }
-
-  protected override(token: Token, provider: Provider): this {
-    const index: number = this.providers.findIndex(it => token === (isTypeProvider(it) ? it : it.provide));
-
-    if (index !== -1) {
-      this.providers.splice(index, 1, provider);
-    }
-
-    return this;
   }
 }
 
 export interface ApplicationBuilderOptions {
   packages?: Package[];
-  providers?: Provider[];
-}
-
-export interface OverrideBy<T> {
-  useClass: (type: Type) => T;
-  useFactory: (options: OverrideByFactoryOptions) => T;
-  useValue: (value: any) => T;
-}
-
-export interface OverrideByFactoryOptions {
-  factory: (...args: any[]) => any;
-  dependencies?: (Token | Dependency)[];
-}
-
-export interface Package {
   providers?: Provider[];
 }
