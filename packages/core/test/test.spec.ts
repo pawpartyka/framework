@@ -5,6 +5,7 @@ import { TestingLogger } from '../src/lib/testing-logger';
 import { Provider } from '../src/lib/types/provider';
 import { Inject } from '../src/lib/decorators/inject';
 import { LoggerFactory } from '../src/lib/logger-factory';
+import { getProviderToken } from '../src/lib/utils/get-provider-token';
 
 describe('Test', () => {
   beforeEach(() => {
@@ -57,8 +58,8 @@ describe('Test', () => {
             .overrideProvider('engine').useClass(TestingEngine)
             .compile();
 
-          expect(await application.find(Car)).toBeInstanceOf(TestingCar);
-          expect(await application.find('engine')).toBeInstanceOf(TestingEngine);
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toBeInstanceOf(TestingCar);
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toBeInstanceOf(TestingEngine);
         }
 
         {
@@ -72,8 +73,8 @@ describe('Test', () => {
             .overrideProvider('engine').useClass(TestingEngine)
             .compile();
 
-          expect(await application.find(Car)).toBeInstanceOf(TestingCar);
-          expect(await application.find('engine')).toBeInstanceOf(TestingEngine);
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toBeInstanceOf(TestingCar);
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toBeInstanceOf(TestingEngine);
         }
 
         {
@@ -88,8 +89,8 @@ describe('Test', () => {
             .overrideProvider('engine').useClass(TestingEngine)
             .compile();
 
-          expect(await application.find(Car)).toBeInstanceOf(TestingCar);
-          expect(await application.find('engine')).toBeInstanceOf(TestingEngine);
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toBeInstanceOf(TestingCar);
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toBeInstanceOf(TestingEngine);
         }
       });
     });
@@ -105,8 +106,8 @@ describe('Test', () => {
             .overrideProvider('engine').useFactory({ factory: () => 'v8' })
             .compile();
 
-          expect(await application.find(Car)).toEqual({ engine: 'v8' });
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual({ engine: 'v8' });
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
 
         {
@@ -120,8 +121,8 @@ describe('Test', () => {
             .overrideProvider('engine').useFactory({ factory: () => 'v8' })
             .compile();
 
-          expect(await application.find(Car)).toEqual({ engine: 'v8' });
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual({ engine: 'v8' });
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
 
         {
@@ -136,8 +137,8 @@ describe('Test', () => {
             .overrideProvider('engine').useFactory({ factory: () => 'v8' })
             .compile();
 
-          expect(await application.find(Car)).toEqual({ engine: 'v8' });
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual({ engine: 'v8' });
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
       });
     });
@@ -153,8 +154,8 @@ describe('Test', () => {
             .overrideProvider('engine').useValue('v8')
             .compile();
 
-          expect(await application.find(Car)).toEqual('BMW');
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual('BMW');
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
 
         {
@@ -168,8 +169,8 @@ describe('Test', () => {
             .overrideProvider('engine').useValue('v8')
             .compile();
 
-          expect(await application.find(Car)).toEqual('BMW');
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual('BMW');
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
 
         {
@@ -184,8 +185,8 @@ describe('Test', () => {
             .overrideProvider('engine').useValue('v8')
             .compile();
 
-          expect(await application.find(Car)).toEqual('BMW');
-          expect(await application.find('engine')).toEqual('v8');
+          expect(await application.find(provider => getProviderToken(provider) === Car)).toEqual('BMW');
+          expect(await application.find(provider => getProviderToken(provider) === 'engine')).toEqual('v8');
         }
       });
     });

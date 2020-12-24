@@ -1,5 +1,4 @@
 import { Logger } from './logger';
-import { Token } from './types/token';
 import { Injector } from './injector';
 import { Provider } from './types/provider';
 import { LoggerFactory } from './logger-factory';
@@ -24,12 +23,12 @@ export class Application {
   ) {
   }
 
-  public async filter(fn: (token: Token) => boolean): Promise<any[]> {
+  public async filter(fn: (provider: Provider) => boolean): Promise<any[]> {
     return this.injector.filter(fn);
   }
 
-  public async find<T>(token: Token<T>, defaultValue?: any): Promise<T> {
-    return this.injector.find(token, defaultValue);
+  public async find<T>(fn: (provider: Provider) => boolean): Promise<T | undefined> {
+    return this.injector.find(fn);
   }
 
   public async listen(): Promise<void> {

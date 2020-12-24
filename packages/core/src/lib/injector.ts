@@ -25,28 +25,20 @@ export class Injector {
     this.providers.unshift({ provide: Injector, useValue: this });
   }
 
-  public async filter(fn: (token: Token) => boolean): Promise<any[]> {
+  public async filter(fn: (provider: Provider) => boolean): Promise<any[]> {
     const resolvedProviders: ResolvedProvider[] = [];
 
-    for (const provider of this.providers.filter(it => fn(getProviderToken(it)))) {
+    for (const provider of this.providers.filter(it => fn(it))) {
       resolvedProviders.push(await this.resolveProvider(provider));
     }
 
     return resolvedProviders.map(it => it.value);
   }
 
-  public async find<T>(token: Token<T>, defaultValue?: any): Promise<T> {
-    const provider: Provider = this.providers.find(it => getProviderToken(it) === token);
+  public async find<T>(fn: (provider: Provider) => boolean): Promise<T | undefined> {
+    const provider: Provider | undefined = this.providers.find(it => fn(it));
 
-    if (provider === undefined) {
-      if (defaultValue === undefined) {
-        throw new Error(`Provider '${ getTokenName(token) }' not found`);
-      }
-
-      return defaultValue;
-    }
-
-    return (await this.resolveProvider(provider)).value;
+    return provider && (await this.resolveProvider(provider)).value;
   }
 
   private async init(): Promise<Injector> {

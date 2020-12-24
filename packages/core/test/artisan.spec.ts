@@ -6,6 +6,7 @@ import { Injectable } from '../src/lib/decorators/injectable';
 import { Logger } from '../src/lib/logger';
 import { LoggerFactory } from '../src/lib/logger-factory';
 import { Provider } from '../src/lib/types/provider';
+import { getProviderToken } from '../src/lib/utils/get-provider-token';
 
 @Injectable()
 class Engine implements OnApplicationBoot, OnApplicationListen, OnApplicationShutdown {
@@ -89,7 +90,7 @@ describe('Artisan', () => {
         })
         .compile();
 
-      expect(await application.find('foo')).toEqual(2);
+      expect(await application.find(provider => getProviderToken(provider) === 'foo')).toEqual(2);
     }
 
     {
@@ -102,7 +103,7 @@ describe('Artisan', () => {
         })
         .compile();
 
-      expect(await application.find('foo')).toEqual(2);
+      expect(await application.find(provider => getProviderToken(provider) === 'foo')).toEqual(2);
     }
 
     {
@@ -115,7 +116,7 @@ describe('Artisan', () => {
         })
         .compile();
 
-      expect(await application.find('foo')).toEqual(2);
+      expect(await application.find(provider => getProviderToken(provider) === 'foo')).toEqual(2);
     }
   });
 
@@ -230,8 +231,12 @@ describe('Artisan', () => {
     const application = await Artisan.configureApplication().compile();
     const findSpy = jest.spyOn(Injector.prototype, 'find');
 
-    await application.find('foo', 'bar');
+    function fn(provider: Provider) {
+      return getProviderToken(provider) === 'foo';
+    }
 
-    expect(findSpy).toHaveBeenNthCalledWith(1, 'foo', 'bar');
+    await application.find(fn);
+
+    expect(findSpy).toHaveBeenNthCalledWith(1, fn);
   });
 });
