@@ -17,10 +17,8 @@ export class Application {
     return await new Application(injector, logger).init(options.signals);
   }
 
-  protected constructor(
-    protected readonly injector: Injector,
-    protected readonly logger: Logger,
-  ) {
+  protected constructor(protected readonly injector: Injector,
+                        protected readonly logger: Logger) {
   }
 
   public async filter(fn: (provider: Provider) => boolean): Promise<any[]> {
