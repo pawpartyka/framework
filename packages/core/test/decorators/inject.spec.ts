@@ -2,7 +2,7 @@ import { forwardRef } from '../../src/lib/utils/forward-ref';
 import { Inject, INJECT_METADATA, InjectMetadata } from '../../src/lib/decorators/inject';
 
 describe('Inject', () => {
-  it('should return correct inject metadata if the class uses the Inject decorator', () => {
+  it('should set the correct metadata on the class reference', () => {
     const baz = 'bar';
     const quz = forwardRef(() => 'baz');
 

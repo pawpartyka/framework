@@ -1,7 +1,7 @@
 import { Optional, OPTIONAL_METADATA, OptionalMetadata } from '../../src/lib/decorators/optional';
 
 describe('Optional', () => {
-  it('should return correct optional metadata if the class uses the Optional decorator', () => {
+  it('should set the correct metadata on the class reference', () => {
     class Foo {
       constructor(
         bar: any,
