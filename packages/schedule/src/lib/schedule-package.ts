@@ -1,5 +1,6 @@
 import { Package, Provider } from '@artisanjs/core';
 import { ScheduleManager } from './schedule-manager';
+import { Schedule } from './services/schedule';
 
 export class SchedulePackage {
   public static configure(): SchedulePackage {
@@ -10,6 +11,7 @@ export class SchedulePackage {
 
   protected constructor() {
     this.providers = [
+      Schedule,
       ScheduleManager,
     ];
   }
