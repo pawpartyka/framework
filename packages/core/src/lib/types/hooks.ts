@@ -1,5 +1,5 @@
-export interface OnApplicationBoot {
-  onApplicationBoot(): void | Promise<void>;
+export interface OnApplicationInit {
+  onApplicationInit(): void | Promise<void>;
 }
 
 export interface OnApplicationListen {
@@ -7,5 +7,5 @@ export interface OnApplicationListen {
 }
 
 export interface OnApplicationShutdown {
-  onApplicationShutdown(signal: string): void | Promise<void>;
+  onApplicationShutdown(signal?: string): void | Promise<void>;
 }

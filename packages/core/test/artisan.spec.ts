@@ -1,16 +1,16 @@
 import { Artisan } from '../src/lib/artisan';
 import { Injector } from '../src/lib/injector';
-import { Application } from '../src/lib/application';
-import { OnApplicationBoot, OnApplicationListen, OnApplicationShutdown } from '../src/lib/types/hooks';
+import { OnApplicationInit, OnApplicationListen, OnApplicationShutdown } from '../src/lib/types/hooks';
 import { Injectable } from '../src/lib/decorators/injectable';
 import { Logger } from '../src/lib/logger';
 import { LoggerFactory } from '../src/lib/logger-factory';
 import { Provider } from '../src/lib/types/provider';
 import { getProviderToken } from '../src/lib/utils/get-provider-token';
+import { Application } from '../src/lib/application';
 
 @Injectable()
-class Engine implements OnApplicationBoot, OnApplicationListen, OnApplicationShutdown {
-  onApplicationBoot(): void {
+class Engine implements OnApplicationInit, OnApplicationListen, OnApplicationShutdown {
+  onApplicationInit(): void {
     return;
   }
 
@@ -24,11 +24,18 @@ class Engine implements OnApplicationBoot, OnApplicationListen, OnApplicationShu
 }
 
 @Injectable()
-class Car implements OnApplicationBoot, OnApplicationListen, OnApplicationShutdown {
+class BrokenEngine extends Engine {
+  onApplicationShutdown(signal: string): void {
+    throw Error();
+  }
+}
+
+@Injectable()
+class Car implements OnApplicationInit, OnApplicationListen, OnApplicationShutdown {
   constructor(public engine: Engine) {
   }
 
-  onApplicationBoot(): void {
+  onApplicationInit(): void {
     return;
   }
 
@@ -46,7 +53,33 @@ describe('Artisan', () => {
     jest.restoreAllMocks();
   });
 
-  it('should correctly set logger in LoggerFactory', async () => {
+  it('should call filter method in Injector', async () => {
+    const application = await Artisan.configureApplication().compile();
+    const injectorFilterSpy = jest.spyOn(Injector.prototype, 'filter');
+
+    function fn() {
+      return true;
+    }
+
+    await application.filter(fn);
+
+    expect(injectorFilterSpy).toHaveBeenNthCalledWith(1, fn);
+  });
+
+  it('should call find method in Injector', async () => {
+    const application = await Artisan.configureApplication().compile();
+    const injectorFindSpy = jest.spyOn(Injector.prototype, 'find');
+
+    function fn(provider: Provider) {
+      return getProviderToken(provider) === 'foo';
+    }
+
+    await application.find(fn);
+
+    expect(injectorFindSpy).toHaveBeenNthCalledWith(1, fn);
+  });
+
+  it('should set logger in LoggerFactory', async () => {
     class SampleLogger extends Logger {
     }
 
@@ -59,7 +92,7 @@ describe('Artisan', () => {
     expect(useLoggerSpy).toHaveBeenNthCalledWith(1, SampleLogger);
   });
 
-  it('should correctly pass providers to Injector', async () => {
+  it('should pass providers to Injector', async () => {
     const createSpy = jest.spyOn(Injector, 'create');
     const providers1: Provider[] = [{ provide: 'foo', useValue: 'foo' }];
     const providers2: Provider[] = [{ provide: 'bar', useValue: 'bar' }];
@@ -76,7 +109,7 @@ describe('Artisan', () => {
     expect(createSpy).toHaveBeenNthCalledWith(1, [...providers1, ...providers2]);
   });
 
-  it('should correctly resolve the same provider by priority', async () => {
+  it('should resolve the same provider by priority', async () => {
     const providers1: Provider[] = [{ provide: 'foo', useValue: 1 }];
     const providers2: Provider[] = [{ provide: 'foo', useValue: 2 }];
 
@@ -120,7 +153,7 @@ describe('Artisan', () => {
     }
   });
 
-  it('should correctly enable signals for shutdown hooks', async () => {
+  it('should enable only unique signals', async () => {
     const createSpy = jest.spyOn(Application, 'create');
     const processOnSpy = jest.spyOn(process, 'on').mockImplementation(jest.fn());
 
@@ -137,73 +170,133 @@ describe('Artisan', () => {
   });
 
   it('should invoke hooks in the correct sequence', async () => {
-    const processKillSpy = jest.spyOn(process, 'kill').mockImplementation(jest.fn());
-
-    const engineOnApplicationBootSpy = jest.spyOn(Engine.prototype, 'onApplicationBoot');
+    const engineOnApplicationInitSpy = jest.spyOn(Engine.prototype, 'onApplicationInit');
     const engineOnApplicationListenSpy = jest.spyOn(Engine.prototype, 'onApplicationListen');
     const engineOnApplicationShutdownSpy = jest.spyOn(Engine.prototype, 'onApplicationShutdown');
 
-    const carOnApplicationBootSpy = jest.spyOn(Car.prototype, 'onApplicationBoot');
+    const carOnApplicationInitSpy = jest.spyOn(Car.prototype, 'onApplicationInit');
     const carOnApplicationListenSpy = jest.spyOn(Car.prototype, 'onApplicationListen');
     const carOnApplicationShutdownSpy = jest.spyOn(Car.prototype, 'onApplicationShutdown');
 
+    const processRemoveListenerSpy = jest.spyOn(process, 'removeListener');
+
+    const signals = ['SIGTERM', 'SIGINT'];
+
     const application = await Artisan
       .configureApplication({
-        packages: [
-          { providers: [Engine] },
-        ],
-        providers: [
-          { provide: Car, useClass: Car },
-        ],
+        providers: [Engine, Car],
       })
-      .enableShutdownHooks(['SIGTERM'])
+      .enableShutdownHooks(signals)
       .compile();
 
-    expect(engineOnApplicationBootSpy).toHaveBeenCalledTimes(1);
+    expect(engineOnApplicationInitSpy).toHaveBeenCalledTimes(1);
     expect(engineOnApplicationListenSpy).toHaveBeenCalledTimes(0);
     expect(engineOnApplicationShutdownSpy).toHaveBeenCalledTimes(0);
 
-    expect(carOnApplicationBootSpy).toHaveBeenCalledTimes(1);
+    expect(carOnApplicationInitSpy).toHaveBeenCalledTimes(1);
     expect(carOnApplicationListenSpy).toHaveBeenCalledTimes(0);
     expect(carOnApplicationShutdownSpy).toHaveBeenCalledTimes(0);
 
+    expect(processRemoveListenerSpy).not.toHaveBeenCalled();
+
     await application.listen();
 
-    expect(engineOnApplicationBootSpy).toHaveBeenCalledTimes(1);
+    expect(engineOnApplicationInitSpy).toHaveBeenCalledTimes(1);
     expect(engineOnApplicationListenSpy).toHaveBeenCalledTimes(1);
     expect(engineOnApplicationShutdownSpy).toHaveBeenCalledTimes(0);
 
-    expect(carOnApplicationBootSpy).toHaveBeenCalledTimes(1);
+    expect(carOnApplicationInitSpy).toHaveBeenCalledTimes(1);
     expect(carOnApplicationListenSpy).toHaveBeenCalledTimes(1);
     expect(carOnApplicationShutdownSpy).toHaveBeenCalledTimes(0);
+
+    expect(processRemoveListenerSpy).not.toHaveBeenCalled();
+
+    await application.shutdown();
+
+    expect(engineOnApplicationInitSpy).toHaveBeenCalledTimes(1);
+    expect(engineOnApplicationListenSpy).toHaveBeenCalledTimes(1);
+    expect(engineOnApplicationShutdownSpy).toHaveBeenNthCalledWith(1, undefined);
+
+    expect(carOnApplicationInitSpy).toHaveBeenCalledTimes(1);
+    expect(carOnApplicationListenSpy).toHaveBeenCalledTimes(1);
+    expect(carOnApplicationShutdownSpy).toHaveBeenNthCalledWith(1, undefined);
+
+    expect(processRemoveListenerSpy).toHaveBeenCalledTimes(signals.length);
+    expect(processRemoveListenerSpy).toHaveBeenCalledWith(signals[0], expect.any(Function));
+    expect(processRemoveListenerSpy).toHaveBeenCalledWith(signals[1], expect.any(Function));
+  });
+
+  it('should invoke shutdown hooks if the process emits an enabled signal', async () => {
+    const engineOnApplicationShutdownSpy = jest.spyOn(Engine.prototype, 'onApplicationShutdown');
+    const removeListenerSpy = jest.spyOn(process, 'removeListener');
+    const processKillSpy = jest.spyOn(process, 'kill').mockImplementation(jest.fn());
+
+    await Artisan
+      .configureApplication({
+        providers: [Engine],
+      })
+      .enableShutdownHooks(['SIGTERM'])
+      .compile();
+
+    expect(engineOnApplicationShutdownSpy).not.toHaveBeenCalled();
+    expect(removeListenerSpy).not.toHaveBeenCalled();
+    expect(processKillSpy).not.toHaveBeenCalled();
 
     process.emit('SIGTERM', 'SIGTERM');
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(engineOnApplicationBootSpy).toHaveBeenCalledTimes(1);
-    expect(engineOnApplicationListenSpy).toHaveBeenCalledTimes(1);
-    expect(engineOnApplicationShutdownSpy).toHaveBeenCalledTimes(1);
-
-    expect(carOnApplicationBootSpy).toHaveBeenCalledTimes(1);
-    expect(carOnApplicationListenSpy).toHaveBeenCalledTimes(1);
-    expect(carOnApplicationShutdownSpy).toHaveBeenCalledTimes(1);
-
+    expect(engineOnApplicationShutdownSpy).toHaveBeenNthCalledWith(1, 'SIGTERM');
+    expect(removeListenerSpy).toHaveBeenNthCalledWith(1, 'SIGTERM', expect.any(Function));
     expect(processKillSpy).toHaveBeenNthCalledWith(1, process.pid, 'SIGTERM');
   });
 
-  it('should terminate the process if the OnApplicationShutdown hook throws an exception', async () => {
-    const processExitSpy = jest.spyOn<any, any>(process, 'exit').mockImplementation(jest.fn());
-
-    @Injectable()
-    class Sample implements OnApplicationShutdown {
-      onApplicationShutdown(signal: string): void {
-        throw Error();
-      }
-    }
+  it('should not invoke shutdown hooks if the process emits the disabled signal', async () => {
+    const engineOnApplicationShutdownSpy = jest.spyOn(Engine.prototype, 'onApplicationShutdown');
+    const removeListenerSpy = jest.spyOn(process, 'removeListener');
+    const processKillSpy = jest.spyOn(process, 'kill').mockImplementation(jest.fn());
 
     await Artisan
       .configureApplication({
-        providers: [Sample],
+        providers: [Engine],
+      })
+      .compile();
+
+    process.emit('SIGTERM', 'SIGTERM');
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(engineOnApplicationShutdownSpy).not.toHaveBeenCalled();
+    expect(removeListenerSpy).not.toHaveBeenCalled();
+    expect(processKillSpy).not.toHaveBeenCalled();
+  });
+
+  it('should exit the process if the shutdown method is called and then OnApplicationShutdown hook throws an exception', async () => {
+    const brokenEngineOnApplicationShutdownSpy = jest.spyOn(BrokenEngine.prototype, 'onApplicationShutdown');
+    const loggerErrorSpy = jest.spyOn(Logger.prototype, 'error');
+    const processExitSpy = jest.spyOn<any, any>(process, 'exit').mockImplementation(jest.fn());
+
+    const application = await Artisan
+      .configureApplication({
+        providers: [BrokenEngine],
+      })
+      .compile();
+
+    await application.shutdown();
+
+    expect(brokenEngineOnApplicationShutdownSpy).toHaveBeenNthCalledWith(1, undefined);
+    expect(loggerErrorSpy).toHaveBeenNthCalledWith(1, 'An error occurred while shutting down');
+    expect(processExitSpy).toHaveBeenNthCalledWith(1, 1);
+  });
+
+  it('should exit the process if the process emits enabled signal and then OnApplicationShutdown hook throws an exception', async () => {
+    jest.spyOn(process, 'kill').mockImplementation(jest.fn());
+
+    const brokenEngineOnApplicationShutdownSpy = jest.spyOn(BrokenEngine.prototype, 'onApplicationShutdown');
+    const loggerErrorSpy = jest.spyOn(Logger.prototype, 'error');
+    const processExitSpy = jest.spyOn<any, any>(process, 'exit').mockImplementation(jest.fn());
+
+    await Artisan
+      .configureApplication({
+        providers: [BrokenEngine],
       })
       .enableShutdownHooks(['SIGTERM'])
       .compile();
@@ -211,32 +304,8 @@ describe('Artisan', () => {
     process.emit('SIGTERM', 'SIGTERM');
     await new Promise(resolve => setTimeout(resolve, 0));
 
+    expect(brokenEngineOnApplicationShutdownSpy).toHaveBeenNthCalledWith(1, 'SIGTERM');
+    expect(loggerErrorSpy).toHaveBeenNthCalledWith(1, 'An error occurred while shutting down');
     expect(processExitSpy).toHaveBeenNthCalledWith(1, 1);
-  });
-
-  it('should correctly call filter method in Injector', async () => {
-    const application = await Artisan.configureApplication().compile();
-    const filterSpy = jest.spyOn(Injector.prototype, 'filter');
-
-    function fn() {
-      return true;
-    }
-
-    await application.filter(fn);
-
-    expect(filterSpy).toHaveBeenNthCalledWith(1, fn);
-  });
-
-  it('should correctly call find method in Injector', async () => {
-    const application = await Artisan.configureApplication().compile();
-    const findSpy = jest.spyOn(Injector.prototype, 'find');
-
-    function fn(provider: Provider) {
-      return getProviderToken(provider) === 'foo';
-    }
-
-    await application.find(fn);
-
-    expect(findSpy).toHaveBeenNthCalledWith(1, fn);
   });
 });

@@ -4,7 +4,7 @@ import { Provider } from './types/provider';
 import { LoggerFactory } from './logger-factory';
 import { isTypeProvider } from './utils/is-type-provider';
 import { isClassProvider } from './utils/is-class-provider';
-import { OnApplicationBoot, OnApplicationListen, OnApplicationShutdown } from './types/hooks';
+import { OnApplicationInit, OnApplicationListen, OnApplicationShutdown } from './types/hooks';
 
 export class Application {
   public static async create(options: ApplicationOptions): Promise<Application> {
@@ -14,10 +14,18 @@ export class Application {
 
     const injector: Injector = await Injector.create(options.providers);
 
-    return await new Application(injector, logger).init(options.signals);
+    return await new Application(options, injector, logger).init();
   }
 
-  protected constructor(protected readonly injector: Injector,
+  private readonly processOnListener = async (signal: string) => {
+    await this.callOnApplicationShutdownHooks(signal);
+    await this.unsubscribeProcessListeners();
+
+    process.kill(process.pid, signal);
+  };
+
+  protected constructor(protected readonly applicationOptions: ApplicationOptions,
+                        protected readonly injector: Injector,
                         protected readonly logger: Logger) {
   }
 
@@ -30,6 +38,30 @@ export class Application {
   }
 
   public async listen(): Promise<void> {
+    await this.callOnApplicationListenHooks();
+  }
+
+  public async shutdown(): Promise<void> {
+    await this.callOnApplicationShutdownHooks();
+    this.unsubscribeProcessListeners();
+  }
+
+  protected async init(): Promise<Application> {
+    this.subscribeProcessListeners();
+    await this.callOnApplicationInitHooks();
+
+    return this;
+  }
+
+  private async callOnApplicationInitHooks(): Promise<void> {
+    for (const provider of await this.filter(token => isTypeProvider(token) || isClassProvider(token))) {
+      if (typeof (provider as OnApplicationInit).onApplicationInit === 'function') {
+        await provider.onApplicationInit();
+      }
+    }
+  }
+
+  private async callOnApplicationListenHooks(): Promise<void> {
     for (const provider of await this.filter(token => isTypeProvider(token) || isClassProvider(token))) {
       if (typeof (provider as OnApplicationListen).onApplicationListen === 'function') {
         await provider.onApplicationListen();
@@ -37,38 +69,30 @@ export class Application {
     }
   }
 
-  protected async init(signals: string[]): Promise<Application> {
-    const listener = async (signal: string) => {
-      try {
-        for (const provider of await this.filter(token => isTypeProvider(token) || isClassProvider(token))) {
-          if (typeof (provider as OnApplicationShutdown).onApplicationShutdown === 'function') {
-            await provider.onApplicationShutdown(signal);
-          }
+  private async callOnApplicationShutdownHooks(signal?: string): Promise<void> {
+    try {
+      for (const provider of await this.filter(token => isTypeProvider(token) || isClassProvider(token))) {
+        if (typeof (provider as OnApplicationShutdown).onApplicationShutdown === 'function') {
+          await provider.onApplicationShutdown(signal);
         }
-
-        signals.forEach(it => {
-          process.removeListener(it, listener);
-        });
-
-        process.kill(process.pid, signal);
-      } catch (error) {
-        this.logger.error('An error occurred while shutting down');
-
-        process.exit(1);
       }
-    };
+    } catch (error) {
+      this.logger.error('An error occurred while shutting down');
 
-    for (const signal of signals) {
-      process.on(signal as any, listener);
+      process.exit(1);
     }
+  }
 
-    for (const provider of await this.filter(token => isTypeProvider(token) || isClassProvider(token))) {
-      if (typeof (provider as OnApplicationBoot).onApplicationBoot === 'function') {
-        await provider.onApplicationBoot();
-      }
+  private subscribeProcessListeners(): void {
+    for (const signal of this.applicationOptions.signals) {
+      process.on(signal as any, this.processOnListener);
     }
+  }
 
-    return this;
+  private unsubscribeProcessListeners(): void {
+    for (const signal of this.applicationOptions.signals) {
+      process.removeListener(signal, this.processOnListener);
+    }
   }
 }
 
