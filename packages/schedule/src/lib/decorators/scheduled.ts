@@ -1,4 +1,4 @@
-export const SCHEDULED_METADATA = Symbol('SCHEDULED');
+export const SCHEDULED_METADATA = Symbol('SCHEDULED_METADATA');
 
 export function Scheduled(expression: string, options?: ScheduledOptions): MethodDecorator {
   return (target, propertyKey, descriptor) => {
