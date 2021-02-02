@@ -1,7 +1,7 @@
 {
   "name": "@artisanjs/rabbit",
   "version": "0.0.7",
-  "homepage": "https://artisanjs.io",
+  "homepage": "https://artisanjs.org",
   "description": "Next generation framework for node.js",
   "author": "Paweł Partyka",
   "license": "MIT",
