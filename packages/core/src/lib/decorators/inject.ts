@@ -1,7 +1,7 @@
 import { Token } from '../types/token';
 import { ForwardRef } from '../utils/forward-ref';
 
-export const INJECT_METADATA = Symbol('INJECT');
+export const INJECT_METADATA = Symbol('INJECT_METADATA');
 
 export function Inject(tokenOrForwardRef: Token | ForwardRef): ParameterDecorator {
   return (target, propertyKey, parameterIndex) => {

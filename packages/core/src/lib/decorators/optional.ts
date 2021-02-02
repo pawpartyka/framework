@@ -1,4 +1,4 @@
-export const OPTIONAL_METADATA = Symbol('OPTIONAL');
+export const OPTIONAL_METADATA = Symbol('OPTIONAL_METADATA');
 
 export function Optional(): ParameterDecorator {
   return (target, propertyKey, parameterIndex) => {
