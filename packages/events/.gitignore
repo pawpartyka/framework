@@ -1,0 +1,14 @@
+# blacklist all
+*
+!*/
+
+# include whitelist
+!/src/**
+!/test/**
+!/.gitignore
+!/.npmignore
+!/package.json
+!/package-lock.json
+!/README.md
+!/tsconfig.build.json
+!/tsconfig.json
