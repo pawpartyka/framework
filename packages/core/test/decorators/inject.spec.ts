@@ -3,8 +3,8 @@ import { Inject, INJECT_METADATA, InjectMetadata } from '../../src/lib/decorator
 
 describe('Inject', () => {
   it('should set the correct metadata on the class reference', () => {
-    const baz = 'bar';
-    const quz = forwardRef(() => 'baz');
+    const baz = 'baz';
+    const quz = forwardRef(() => 'quz');
 
     class Foo {
       constructor(
