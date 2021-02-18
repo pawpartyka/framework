@@ -1,11 +1,11 @@
 import { Package, Provider } from '@artisanjs/core';
-import { EventsManager } from './events-manager';
+import { EventEmitterManager } from './event-emitter-manager';
 import { Emitter } from './services/emitter';
 import { EventsRegistry } from './services/events-registry';
 
-export class EventsPackage {
-  public static configure(): EventsPackage {
-    return new EventsPackage();
+export class EventEmitterPackage {
+  public static configure(): EventEmitterPackage {
+    return new EventEmitterPackage();
   }
 
   private readonly providers: Provider[];
@@ -13,7 +13,7 @@ export class EventsPackage {
   protected constructor() {
     this.providers = [
       Emitter,
-      EventsManager,
+      EventEmitterManager,
       EventsRegistry,
     ];
   }

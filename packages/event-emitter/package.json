@@ -1,5 +1,5 @@
 {
-  "name": "@artisanjs/events",
+  "name": "@artisanjs/event-emitter",
   "version": "0.0.7",
   "homepage": "https://artisanjs.org",
   "description": "Next generation framework for node.js",

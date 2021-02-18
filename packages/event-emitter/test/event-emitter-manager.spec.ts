@@ -1,7 +1,7 @@
 import { Injectable, Injector, Logger } from '@artisanjs/core';
 import { OnEvent } from '../src/lib/decorators/on-event';
 import { EventsRegistry } from '../src/lib/services/events-registry';
-import { EventsManager } from '../src/lib/events-manager';
+import { EventEmitterManager } from '../src/lib/event-emitter-manager';
 
 @Injectable()
 class Engine {
@@ -21,7 +21,7 @@ class User {
   }
 }
 
-describe('EventsManager', () => {
+describe('EventEmitterManager', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -30,7 +30,7 @@ describe('EventsManager', () => {
     const eventsRegistryPushSpy = jest.spyOn(EventsRegistry.prototype, 'push');
     const loggerInfoSpy = jest.spyOn(Logger.prototype, 'info');
 
-    await new EventsManager(new EventsRegistry(), await Injector.create([Engine, User])).onApplicationInit();
+    await new EventEmitterManager(new EventsRegistry(), await Injector.create([Engine, User])).onApplicationInit();
 
     expect(eventsRegistryPushSpy).toHaveBeenCalledTimes(3);
     expect(eventsRegistryPushSpy).toHaveBeenCalledWith({ event: 'engine.*', handler: expect.any(Function) });

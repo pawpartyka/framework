@@ -3,8 +3,8 @@ import { EventsRegistry } from './services/events-registry';
 import { ON_EVENT_METADATA, OnEventMetadata } from './decorators/on-event';
 
 @Injectable()
-export class EventsManager implements OnApplicationInit {
-  protected readonly logger: Logger = LoggerFactory.getLogger(EventsManager.name);
+export class EventEmitterManager implements OnApplicationInit {
+  protected readonly logger: Logger = LoggerFactory.getLogger(EventEmitterManager.name);
 
   constructor(private readonly eventsRegistry: EventsRegistry,
               private readonly injector: Injector) {

@@ -1,11 +1,11 @@
 import { Provider } from '@artisanjs/core';
-import { EventsPackage } from '../src/lib/events-package';
+import { EventEmitterPackage } from '../src/lib/event-emitter-package';
 import { Emitter } from '../src/lib/services/emitter';
-import { EventsManager } from '../src/lib/events-manager';
+import { EventEmitterManager } from '../src/lib/event-emitter-manager';
 import { EventsRegistry } from '../src/lib/services/events-registry';
 
-describe('EventsPackage', () => {
-  const providers: Provider[] = EventsPackage
+describe('EventEmitterPackage', () => {
+  const providers: Provider[] = EventEmitterPackage
     .configure()
     .register()
     .providers;
@@ -18,8 +18,8 @@ describe('EventsPackage', () => {
     expect(providers).toContain(Emitter);
   });
 
-  it('should include the EventsManager', async () => {
-    expect(providers).toContain(EventsManager);
+  it('should include the EventEmitterManager', async () => {
+    expect(providers).toContain(EventEmitterManager);
   });
 
   it('should include the EventsRegistry', async () => {
