@@ -10,10 +10,6 @@ describe('EventEmitterPackage', () => {
     .register()
     .providers;
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should include the Emitter', async () => {
     expect(providers).toContain(Emitter);
   });
