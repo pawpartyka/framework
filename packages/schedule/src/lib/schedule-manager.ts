@@ -31,7 +31,7 @@ export class ScheduleManager implements OnApplicationInit, OnApplicationListen, 
         for (const meta of (Reflect.getMetadata(SCHEDULED_METADATA, descriptor.value) || []) as ScheduledMetadata) {
           const name = meta.name || Math.floor(Date.now() * Math.random()).toString(36);
 
-          this.schedule.set(name, new Job({
+          this.schedule.push(new Job({
             callback: descriptor.value.bind(instance),
             expression: meta.expression,
             name: name,
