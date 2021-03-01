@@ -18,7 +18,9 @@ class Foo {
   hello(): void {
   }
 
-  @Scheduled('* * * * *')
+  @Scheduled('* * * * 5', {
+    name: 'world',
+  })
   world(): void {
   }
 }
@@ -59,6 +61,14 @@ describe('ScheduleManager', () => {
       timeZone: 'America/Los_Angeles',
       unrefTimeout: true,
       utcOffset: 1,
+    });
+    expect(Job).toHaveBeenCalledWith(<JobOptions> {
+      callback: expect.any(Function),
+      expression: '* * * * 5',
+      name: 'world',
+      timeZone: undefined,
+      unrefTimeout: undefined,
+      utcOffset: undefined,
     });
     expect(Job).toHaveBeenCalledWith(<JobOptions> {
       callback: expect.any(Function),
