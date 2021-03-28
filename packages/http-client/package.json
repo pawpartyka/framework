@@ -18,9 +18,12 @@
     "build": "tsc -p tsconfig.build.json",
     "prebuild": "rimraf dist"
   },
-  "dependencies": {},
+  "dependencies": {
+    "centra": "^2.4.2"
+  },
   "devDependencies": {
     "@artisanjs/core": "^0.0.7",
+    "@types/centra": "^2.2.0",
     "@types/node": "^13.1.6",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
