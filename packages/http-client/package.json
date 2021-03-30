@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@artisanjs/core": "^0.0.7",
+    "@artisanjs/http-common": "^0.0.7",
     "@types/centra": "^2.2.0",
     "@types/node": "^13.1.6",
     "reflect-metadata": "^0.1.13",
@@ -32,6 +33,7 @@
   },
   "peerDependencies": {
     "@artisanjs/core": "^0.0.7",
+    "@artisanjs/http-common": "^0.0.7",
     "reflect-metadata": "^0.1.13"
   }
 }
