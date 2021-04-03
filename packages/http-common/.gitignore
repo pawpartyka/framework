@@ -6,7 +6,6 @@
 !/src/**
 !/test/**
 !/.gitignore
-!/.npmignore
 !/package.json
 !/package-lock.json
 !/README.md
