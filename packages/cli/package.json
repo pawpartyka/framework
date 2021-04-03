@@ -1,0 +1,35 @@
+{
+  "name": "@artisanjs/cli",
+  "version": "0.0.7",
+  "homepage": "https://artisanjs.org",
+  "description": "Next generation framework for node.js",
+  "author": "Paweł Partyka",
+  "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
+  "bin": {
+    "artisan": "dist/public-api.js"
+  },
+  "main": "dist/public-api.js",
+  "types": "dist/public-api.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artisanjs/artisan.git"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prebuild": "rimraf dist"
+  },
+  "dependencies": {
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.6",
+    "@types/yargs": "^15.0.5",
+    "rimraf": "^3.0.0",
+    "ts-node": "^8.6.1",
+    "typescript": "^4.0.3"
+  },
+  "peerDependencies": {}
+}
