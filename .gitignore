@@ -4,15 +4,12 @@
 
 # include whitelist
 !/.github/**
-!/packages/**
+!/src/**
+!/test/**
 !/.editorconfig
 !/.eslintrc
 !/.gitignore
-!/CODE_OF_CONDUCT.md
-!/CONTRIBUTING.md
-!/lerna.json
-!/LICENSE
 !/package.json
 !/package-lock.json
-!/README.md
+!/tsconfig.build.json
 !/tsconfig.json
